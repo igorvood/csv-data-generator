@@ -18,11 +18,11 @@ class ClientTest : FunSpec({
 
 
     }
-
-
-    test("salary") { }
-
-    test("isWorker") { }
-
-    test("isMarried") { }
+//
+//
+//    test("salary") { }
+//
+//    test("isWorker") { }
+//
+//    test("isMarried") { }
 })

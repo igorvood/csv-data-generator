@@ -25,7 +25,7 @@ abstract class EntityTemplate<ID_TYPE>(
             val value = it.value(entityTemplate, id1.toString())()
             it.key + "=" + value
         }
-            .joinToString(",")
+            .joinToString(", ")
         return joinToString
     }
 
