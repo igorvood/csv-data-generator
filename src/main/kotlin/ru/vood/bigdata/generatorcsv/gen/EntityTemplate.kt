@@ -4,6 +4,7 @@ import ru.vood.bigdata.generatorcsv.gen.dsl.*
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.util.*
+import kotlin.math.abs
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
@@ -49,6 +50,20 @@ abstract class EntityTemplate<ID_TYPE>(
             { entityTemplate, parameterName ->
                 object : DataType<R> {
                     override fun invoke(): R = f(entityTemplate, parameterName)
+                }
+            }
+        return this
+    }
+
+    fun PropBuilder<Boolean>.genBool(
+    ): PropBuilder<Boolean> {
+        this.function =
+            { entityTemplate, parameterName ->
+                object : DataType<Boolean> {
+                    override fun invoke(): Boolean {
+                        val hc = abs(entityTemplate.id().hashCode())
+                        return hc % 2 == 1
+                    }
                 }
             }
         return this

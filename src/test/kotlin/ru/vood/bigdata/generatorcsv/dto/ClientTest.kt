@@ -16,4 +16,11 @@ class ClientTest : FunSpec({
         Assertions.assertNotEquals(Client("1").toString(), Client("2").toString())
     }
 
+    test("generate 10 clients") {
+        (1..10)
+            .map {  Client(it.toString())}
+            .forEach { println(it.toString()) }
+
+    }
+
 })
