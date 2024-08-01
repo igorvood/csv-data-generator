@@ -19,9 +19,9 @@ data class MetaProperty<ID_TYPE, OUT_TYPE>(
 //,Comparable<MetaProperty<ID_TYPE, OUT_TYPE>>/* Comparator<MetaProperty<ID_TYPE, OUT_TYPE>>*/
 {
     override fun invoke(p1: EntityTemplate<ID_TYPE>): OUT_TYPE = function(p1, name)()
-   /* override fun compareTo(other: MetaProperty<ID_TYPE, OUT_TYPE>): Int {
-        return this.name.compareTo(other.name)
-    }*/
+    /* override fun compareTo(other: MetaProperty<ID_TYPE, OUT_TYPE>): Int {
+         return this.name.compareTo(other.name)
+     }*/
 
 }
 

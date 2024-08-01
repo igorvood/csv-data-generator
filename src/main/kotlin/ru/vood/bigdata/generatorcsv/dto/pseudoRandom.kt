@@ -2,8 +2,8 @@ package ru.vood.bigdata.generatorcsv.dto
 
 
 val symbols: String = "0123456789ABCDEFGHIJKLMNOPQRSTUVWYZabcdefghijklmnopqrstuvwyz"
-val length = symbols. length
-fun pseudoRandom (hash: Int, cnt: Int): String {
+val length = symbols.length
+fun pseudoRandom(hash: Int, cnt: Int): String {
     return (0 until cnt).map {
         val n = (hash shr it) + (hash.toString() + it).hashCode()
         val abs = kotlin.math.abs(n)

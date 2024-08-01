@@ -35,10 +35,6 @@ abstract class EntityTemplate<ID_TYPE>(
         meta[build.name] = build.function
     }
 
-//    internal fun addProp(build: Any){
-////        meta.add(build)
-//    }
-
     fun string() = PropBuilder<String>()
     fun number() = PropBuilder<BigDecimal>()
     fun date() = PropBuilder<LocalDateTime>()
