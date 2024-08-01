@@ -4,7 +4,7 @@ import ru.vood.bigdata.generatorcsv.gen.EntityTemplate
 import java.time.LocalDateTime
 import kotlin.math.abs
 
-class Client() : EntityTemplate<String>() {
+class Client : EntityTemplate<String>() {
     val identity by string() genVal { id, paramName ->
         paramName + "_"+id
     }
@@ -15,10 +15,11 @@ class Client() : EntityTemplate<String>() {
     val isWorker by bool() genVal { id, paramName -> salary(id) .hashCode() % 2 ==1 } //getFun()// stdStr()
     val isMarried by bool().genBool()
 
-    val d1 by date() genVal { id, paramName ->
+    val bithDate by date() genVal { id, paramName ->
         LocalDateTime.of(1980, 1, 1, 1, 1).plusDays(abs(id.hashCode()).toLong())
     }
 
-//    val accont by ref<ClientAccont>() genVal { id,paramName->,}
+    val clientAccont = ru.vood.bigdata.generatorcsv.dto.ClientAccont()
+    val accont by ref<ClientAccont>() genVal { id,paramName-> clientAccont}
 
 }
