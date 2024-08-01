@@ -8,29 +8,31 @@ import java.io.File
 class ClientTest : FunSpec({
 
     test("pseudo random test") {
-        val client = Client("1")
-        Client("1").toString() shouldBe client.toString()
+        val client = Client()
+        Client().toString("1") shouldBe client.toString("1")
         println(client.toString())
     }
 
+    val client = Client()
     test("pseudo random test, not equals with dif Id") {
-        Assertions.assertNotEquals(Client("1").toString(), Client("2").toString())
+        Assertions.assertNotEquals(client.toString("1"), client.toString("2"))
     }
 
     test("generate 10 clients") {
         (1..10)
-            .map { Client(it.toString()) }
-            .forEach { println(it.toString()) }
+            .map { client.toString(it.toString()) }
+            .forEach { println(it) }
 
     }
-val cnt = 10_000_000
+val cnt = 1000
     test("generate $cnt clients to file") {
         val file = File("fileName")
         file.printWriter().use { out ->
+
             (1..cnt)
-                .map { Client(it.toString()).toString() }
-                .chunked(1000)
-                .map { it.joinToString("\n") }
+                .toList()
+                .stream()
+                .map { qwe ->  client.toString(qwe.toString()) }
                 .forEach { clientStr ->
                     out.println(clientStr)
                 }

@@ -10,24 +10,25 @@ import kotlin.reflect.KProperty
 
 
 abstract class EntityTemplate<ID_TYPE>(
-    id: ID_TYPE,
+//    id: ID_TYPE,
 ) : DataType<EntityTemplate<ID_TYPE>> {
 
-    private val meta: TreeMap<String, GenerateFieldValueFunction<ID_TYPE, DataType<*>>> = TreeMap()
+    private val meta: TreeMap<String, GenerateValueFunction<ID_TYPE, DataType<*>>> = TreeMap()
 
-    val id: DataType<ID_TYPE> = object : DataType<ID_TYPE> {
-        override fun invoke(): ID_TYPE = id
-    }
+//    val id: DataType<ID_TYPE> = object : DataType<ID_TYPE> {
+//        override fun invoke(): ID_TYPE = id
+//    }
 
-    override fun toString(): String {
-        val joinToString = meta.map {
-            val entityTemplate = this
-            val id1 = id.invoke()
-            val value = it.value(entityTemplate, id1.toString())()
-            it.key + "=" + value
+    fun toString(id: ID_TYPE): String {
+        val generate = generate(id) { entityTemplate, idVal ->
+            entityTemplate.meta.map {
+                val value = it.value(idVal, idVal.toString())()
+                it.key + "=" + value
+            }
+                .joinToString(", ")
+
         }
-            .joinToString(", ")
-        return joinToString
+    return generate
     }
 
     override fun invoke(): EntityTemplate<ID_TYPE> = this
@@ -47,13 +48,13 @@ abstract class EntityTemplate<ID_TYPE>(
     inline fun <reified Z> ref() = PropBuilder<Z>()
     inline fun <reified Z> set() = PropBuilder<Set<Z>>()
 
-    inline infix fun <reified R> PropBuilder<R>.genVal(
-        crossinline f: GenerateFieldValueFunctionDsl<ID_TYPE, R>
-    ): PropBuilder<R> {
+    inline infix fun <reified OUT_TYPE> PropBuilder<OUT_TYPE>.genVal(
+        crossinline f: GenerateValueFunction<ID_TYPE, OUT_TYPE>
+    ): PropBuilder<OUT_TYPE> {
         this.function =
-            { entityTemplate, parameterName ->
-                object : DataType<R> {
-                    override fun invoke(): R = f(entityTemplate, parameterName)
+            { idVal, parameterName ->
+                object : DataType<OUT_TYPE> {
+                    override fun invoke(): OUT_TYPE = f(idVal, parameterName)
                 }
             }
         return this
@@ -62,10 +63,10 @@ abstract class EntityTemplate<ID_TYPE>(
     fun PropBuilder<Boolean>.genBool(
     ): PropBuilder<Boolean> {
         this.function =
-            { entityTemplate, parameterName ->
+            { id, parameterName ->
                 object : DataType<Boolean> {
                     override fun invoke(): Boolean {
-                        val hc = abs(entityTemplate.id().hashCode())
+                        val hc = abs(id.hashCode())
                         return hc % 2 == 1
                     }
                 }
@@ -75,7 +76,7 @@ abstract class EntityTemplate<ID_TYPE>(
 
     inner class PropBuilder<R>(
         var name: FieldName = "",
-        var function: GenerateFieldValueFunction<ID_TYPE, DataType<R>> = { _, _ ->
+        var function: GenerateValueFunction<ID_TYPE, DataType<R>> = { _, _ ->
             error("Необходимо определить ф-цию в мете для поля $name ")
         }
     ) : Builder<MetaProperty<ID_TYPE, R>>
