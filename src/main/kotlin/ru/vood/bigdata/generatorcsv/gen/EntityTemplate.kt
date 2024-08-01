@@ -19,10 +19,14 @@ abstract class EntityTemplate<ID_TYPE>(
     }
 
     override fun toString(): String {
-        meta.map { val entityTemplate = this
+        val joinToString = meta.map {
+            val entityTemplate = this
             val id1 = id.invoke()
-            it.key+"="+it.value(entityTemplate, id1.toString()) }
-        return super.toString()
+            val value = it.value(entityTemplate, id1.toString())()
+            it.key + "=" + value
+        }
+            .joinToString(",")
+        return joinToString
     }
 
     override fun invoke(): EntityTemplate<ID_TYPE> = this
@@ -57,7 +61,7 @@ abstract class EntityTemplate<ID_TYPE>(
     inner class PropBuilder<R>(
         var name: FieldName = "",
         var function: GenerateFieldValueFunction<ID_TYPE, DataType<R>> = { _, _ ->
-            error("Необходимо определить ф-цию в мете")
+            error("Необходимо определить ф-цию в мете для поля $name ")
         }
     ) : Builder<MetaProperty<ID_TYPE, R>>
 //where ET: EntityTemplate<Any>

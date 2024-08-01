@@ -10,7 +10,7 @@ class Client(id: String): EntityTemplate<String>(id){
     val salary by number() genVal { q, w -> id.hashCode().toBigDecimal() } //getFun()// stdStr()
 
     val isWorker by bool() genVal { q, w -> true } //getFun()// stdStr()
-    val isMarried by bool()
+    val isMarried by bool()genVal { q, w -> true } //getFun()// stdStr()
 
     val d1 by date() genVal { q, w -> LocalDateTime.MIN } //getFun()// stdStr()
 
