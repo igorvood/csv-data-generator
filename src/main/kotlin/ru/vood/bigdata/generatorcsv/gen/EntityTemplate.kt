@@ -38,7 +38,7 @@ abstract class EntityTemplate<ID_TYPE>(
     }
 
     internal fun addProp(build: MetaProperty<ID_TYPE, *>) {
-        meta[build.name] = build.function
+        meta[build.paramName] = build.function
     }
 
     fun string() = PropBuilder<String>()

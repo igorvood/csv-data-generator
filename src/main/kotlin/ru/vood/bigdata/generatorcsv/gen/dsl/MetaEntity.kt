@@ -13,12 +13,12 @@ data class MetaEntity<ID_TYPE>
 )
 
 data class MetaProperty<ID_TYPE, OUT_TYPE>(
-    val name: FieldName,
+    val paramName: FieldName,
     val function: GenerateValueFunction<ID_TYPE, DataType<OUT_TYPE>>
 ) : (ID_TYPE) -> OUT_TYPE
 //,Comparable<MetaProperty<ID_TYPE, OUT_TYPE>>/* Comparator<MetaProperty<ID_TYPE, OUT_TYPE>>*/
 {
-    override fun invoke(p1: ID_TYPE): OUT_TYPE = function(p1, name)()
+    override fun invoke(p1: ID_TYPE): OUT_TYPE = function(p1, paramName)()
     /* override fun compareTo(other: MetaProperty<ID_TYPE, OUT_TYPE>): Int {
          return this.name.compareTo(other.name)
      }*/
