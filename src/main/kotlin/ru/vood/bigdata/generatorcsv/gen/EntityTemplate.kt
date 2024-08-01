@@ -16,7 +16,13 @@ abstract class EntityTemplate<ID_TYPE>(
 
     val id: DataType<ID_TYPE> = object : DataType<ID_TYPE> {
         override fun invoke(): ID_TYPE = id
+    }
 
+    override fun toString(): String {
+        meta.map { val entityTemplate = this
+            val id1 = id.invoke()
+            it.key+"="+it.value(entityTemplate, id1.toString()) }
+        return super.toString()
     }
 
     override fun invoke(): EntityTemplate<ID_TYPE> = this
