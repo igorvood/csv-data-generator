@@ -22,7 +22,7 @@ abstract class EntityTemplate<ID_TYPE>(
     fun toString(id: ID_TYPE): String {
         val generate = generate(id) { entityTemplate, idVal ->
             entityTemplate.meta.map {
-                val value = it.value(idVal, idVal.toString())()
+                val value = it.value(idVal, it.key)()
                 it.key + "=" + value
             }
                 .joinToString(", ")
