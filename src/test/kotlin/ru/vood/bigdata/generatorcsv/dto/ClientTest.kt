@@ -23,18 +23,14 @@ class ClientTest : FunSpec({
             .forEach { println(it.toString()) }
 
     }
-
-    test("generate 1000 clients to file") {
-
+val cnt = 10_000_000
+    test("generate $cnt clients to file") {
         val file = File("fileName")
-
-        val joinToString = (1..10_000_000)
-
         file.printWriter().use { out ->
-            (1..10_000_000)
+            (1..cnt)
                 .map { Client(it.toString()).toString() }
                 .chunked(1000)
-                .map { asdasd -> asdasd.joinToString("\n") }
+                .map { it.joinToString("\n") }
                 .forEach { clientStr ->
                     out.println(clientStr)
                 }

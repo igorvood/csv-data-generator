@@ -32,6 +32,10 @@ abstract class EntityTemplate<ID_TYPE>(
 
     override fun invoke(): EntityTemplate<ID_TYPE> = this
 
+    fun generate(id: ID_TYPE, printFun: (EntityTemplate<ID_TYPE>, ID_TYPE )-> String ): String {
+        return printFun(this, id)
+    }
+
     internal fun addProp(build: MetaProperty<ID_TYPE, *>) {
         meta[build.name] = build.function
     }
