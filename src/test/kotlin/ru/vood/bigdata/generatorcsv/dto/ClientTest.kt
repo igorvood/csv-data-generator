@@ -8,21 +8,20 @@ import java.io.File
 class ClientTest : FunSpec({
 
     test("pseudo random test") {
-        val client = Client()
-        Client().toString("1") shouldBe client.toString("1")
+        val client = Client("1")
+        client.toString() shouldBe Client("2").toString()
         println(client.toString())
     }
 
-    val client = Client()
+//    val client = Client()
     test("pseudo random test, not equals with dif Id") {
-        Assertions.assertNotEquals(client.toString("1"), client.toString("2"))
+        Assertions.assertNotEquals(Client("1").toString(), Client("2").toString())
     }
 
     test("generate 10 clients") {
         (1..10)
-            .map { client.toString(it.toString()) }
+            .map { Client(it.toString()).toString() }
             .forEach { println(it) }
-
     }
 val cnt = 1000
     test("generate $cnt clients to file") {
@@ -32,7 +31,7 @@ val cnt = 1000
             (1..cnt)
                 .toList()
                 .stream()
-                .map { qwe ->  client.toString(qwe.toString()) }
+                .map { qwe ->  Client(qwe.toString()).toString() }
                 .forEach { clientStr ->
                     out.println(clientStr)
                 }

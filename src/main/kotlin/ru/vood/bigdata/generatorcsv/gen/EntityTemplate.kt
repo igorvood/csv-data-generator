@@ -10,20 +10,24 @@ import kotlin.reflect.KProperty
 
 
 abstract class EntityTemplate<ID_TYPE>(
-//    id: ID_TYPE,
+    id: ID_TYPE,
 ) : DataType<EntityTemplate<ID_TYPE>> {
 
     private val meta: TreeMap<String, MetaProperty<ID_TYPE, *>> = TreeMap()
 
-//    val id: DataType<ID_TYPE> = object : DataType<ID_TYPE> {
-//        override fun invoke(): ID_TYPE = id
-//    }
+    val id: DataType<ID_TYPE> = object : DataType<ID_TYPE> {
+        override fun invoke(): ID_TYPE = id
+    }
 
-    fun toString(id: ID_TYPE): String {
-        val generate = generate(id) { entityTemplate, idVal ->
+    override fun toString(/*id: ID_TYPE*/): String {
+        val generate = generate(id()) { entityTemplate, idVal ->
             entityTemplate.meta.map {
-                val value = it.value.function(idVal, it.key)()
-                it.key + "=" + value
+//                when(it.value.isSimpleType){
+//                    true -> it.value.function(idVal, it.key)()
+//                    false -> it.
+//                }
+//                val value =
+                it.key + "=" + it.value.function(idVal, it.key)()
             }
                 .joinToString(", ")
 
@@ -41,12 +45,12 @@ abstract class EntityTemplate<ID_TYPE>(
         meta[metaProperty.paramName] = metaProperty
     }
 
-    fun string() = PropBuilder<String>()
-    fun number() = PropBuilder<BigDecimal>()
-    fun date() = PropBuilder<LocalDateTime>()
-    fun bool() = PropBuilder<Boolean>()
-    inline fun <reified Z> ref() = PropBuilder<Z>()
-    inline fun <reified Z> set() = PropBuilder<Set<Z>>()
+    fun string() = PropBuilder<String>(isSimpleType = true)
+    fun number() = PropBuilder<BigDecimal>(isSimpleType = true)
+    fun date() = PropBuilder<LocalDateTime>(isSimpleType = true)
+    fun bool() = PropBuilder<Boolean>(isSimpleType = true)
+    inline fun <reified Z> ref() = PropBuilder<Z>(isSimpleType = false)
+    inline fun <reified Z> set() = PropBuilder<Set<Z>>(isSimpleType = false)
 
     inline infix fun <reified OUT_TYPE> PropBuilder<OUT_TYPE>.genVal(
         crossinline f: GenerateValueFunction<ID_TYPE, OUT_TYPE>
@@ -78,7 +82,8 @@ abstract class EntityTemplate<ID_TYPE>(
         var name: FieldName = "",
         var function: GenerateValueFunction<ID_TYPE, DataType<R>> = { _, _ ->
             error("Необходимо определить ф-цию в мете для поля $name ")
-        }
+        },
+        var isSimpleType: Boolean
     ) : Builder<MetaProperty<ID_TYPE, R>>
 //where ET: EntityTemplate<Any>
     {
@@ -96,7 +101,7 @@ abstract class EntityTemplate<ID_TYPE>(
 
         }
 
-        override fun build(): MetaProperty<ID_TYPE, R> = MetaProperty(name, function)
+        override fun build(): MetaProperty<ID_TYPE, R> = MetaProperty(name, function, isSimpleType)
     }
 
 }
