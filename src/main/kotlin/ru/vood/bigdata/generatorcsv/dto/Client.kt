@@ -15,7 +15,7 @@ class Client : EntityTemplate<String>() {
     val isWorker by bool() genVal { id, paramName -> salary(id) .hashCode() % 2 ==1 } //getFun()// stdStr()
     val isMarried by bool().genBool()
 
-    val bithDate by date() genVal { id, paramName ->
+    val birthDate by date() genVal { id, paramName ->
         LocalDateTime.of(1980, 1, 1, 1, 1).plusDays(abs(id.hashCode()).toLong())
     }
 
