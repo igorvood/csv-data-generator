@@ -2,7 +2,6 @@ package ru.vood.bigdata.generatorcsv.dto
 
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNot
 import org.junit.jupiter.api.Assertions
 
 class ClientTest : FunSpec({
