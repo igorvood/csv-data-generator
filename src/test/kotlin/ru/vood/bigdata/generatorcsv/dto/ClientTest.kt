@@ -14,14 +14,6 @@ class ClientTest : FunSpec({
 
     test("pseudo random test, not equals with dif Id") {
         Assertions.assertNotEquals(Client("1").toString(), Client("2").toString())
-
-
     }
-//
-//
-//    test("salary") { }
-//
-//    test("isWorker") { }
-//
-//    test("isMarried") { }
+
 })
