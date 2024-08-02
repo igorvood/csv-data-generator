@@ -58,7 +58,6 @@ class ClientTest : FunSpec({
                         .asFlow()
                         .chunked(200)
                         .map { qwe -> qwe.map { Client(it.toString()).myToString() }.joinToString(System.lineSeparator()) }
-                        //                        .reduce { accumulator, value -> accumulator + System.lineSeparator() + value }
                         .toList()
                         .joinToString(System.lineSeparator())
 
@@ -69,5 +68,26 @@ class ClientTest : FunSpec({
 
             }
     }
+
+    test("generate ${cnt * subCnt} $fileClients to file files both") {
+        val map1 = (0..cnt).asFlow()
+            .map { Client(it.toString()) }
+            .chunked(subCnt)
+        val file = File("${foldCl}_paralel")
+        map1
+            .collect { fl ->
+                val map = fl
+                    .map { cl ->  cl.myToString() }
+                    .joinToString(System.lineSeparator())
+
+                file.printWriter().use { out ->
+                    out.println(map)
+                }
+            }
+
+
+
+            }
+
 })
 
