@@ -20,23 +20,19 @@ abstract class EntityTemplate<ID_TYPE>(
         override fun invoke(): ID_TYPE = id
     }
 
-//    override fun hashCode(): Int {
-//        return meta.map {
-//            it.value.function(id(), it.key)().toString().hashCode()
-//        }
-//            .sum().hashCode()
-//    }
+    override fun hashCode(): Int {
+        return myToString().hashCode()
+    }
 
-    suspend fun myToString(/*id: ID_TYPE*/): String {
+     fun myToString(/*id: ID_TYPE*/): String {
         val generate = generate(id()) { entityTemplate, idVal ->
             entityTemplate.meta.map {
-                val value = when(it.value.isSimpleType){
+                 when(it.value.isSimpleType){
                     true -> {
                         val f = it.value.function
-                        it.value.function(idVal, it.key)()
+                        it.key + "=" + it.value.function(idVal, it.key)()
                     }
                     false -> {
-//                       "{"+ it.value.function(idVal, it.key)()+"}"
                         val value = it.value
                         val function = value.function as GenerateValueFunction<EntityTemplate<ID_TYPE>, DataType<EntityTemplate<*>>>
                         val any = function(
@@ -46,13 +42,12 @@ abstract class EntityTemplate<ID_TYPE>(
                         val string = runBlocking {   any.myToString()}
                         val s = "{" + string + "}"
                         s
+                        ""
                     }
 
                 }
-//
-                it.key + "=" + value
-//                it.key + "=" + it.value.function(idVal, it.key)()
             }
+                .filter { !it.isBlank() }
                 .joinToString(", ")
 
         }
