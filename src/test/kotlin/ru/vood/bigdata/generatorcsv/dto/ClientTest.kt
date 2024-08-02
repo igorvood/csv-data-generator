@@ -47,14 +47,34 @@ class ClientTest : FunSpec({
                 out.println(runBlocking)
 
             }
-//            (1..cnt)
-//                .toList()
-//                .stream()
-//                .map { qwe ->  Client(qwe.toString()).toString() }
-//                .forEach { clientStr ->
-//                    out.println(clientStr)
-//                }
         }
+
+
+    }
+
+    test("generate ${cnt * subCnt} clients to file files") {
+//        val file = File("fileName")
+//        file.printWriter().use { out ->
+
+        ( 0..cnt).asFlow()
+            .collect { i ->
+
+
+                    val map = (i * subCnt..(i * subCnt) + subCnt - 1)
+                        .asFlow()
+                        .chunked(200)
+                        .map { qwe -> qwe.map { Client(it.toString()).myToString() } }
+                        //                        .reduce { accumulator, value -> accumulator + System.lineSeparator() + value }
+                        .toList()
+                        .joinToString(System.lineSeparator())
+
+                val file = File("fileName_${i}")
+                file.printWriter().use { out ->
+                    out.println(map)
+                }
+
+            }
+//        }
 
 
     }
