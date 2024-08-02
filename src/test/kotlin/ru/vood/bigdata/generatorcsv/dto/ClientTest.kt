@@ -5,6 +5,7 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.flow.*
 import org.junit.jupiter.api.Assertions
+import ru.vood.bigdata.generatorcsv.runner.chunked
 import java.io.File
 
 class ClientTest : FunSpec({
@@ -81,18 +82,3 @@ class ClientTest : FunSpec({
 
 })
 
-fun <T> Flow<T>.chunked(chunkSize: Int): Flow<List<T>> {
-    val buffer = mutableListOf<T>()
-    return flow {
-        this@chunked.collect {
-            buffer.add(it)
-            if (buffer.size == chunkSize) {
-                emit(buffer.toList())
-                buffer.clear()
-            }
-        }
-        if (buffer.isNotEmpty()) {
-            emit(buffer.toList())
-        }
-    }
-}
