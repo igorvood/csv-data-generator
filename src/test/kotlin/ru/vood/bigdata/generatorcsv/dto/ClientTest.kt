@@ -26,26 +26,27 @@ class ClientTest : FunSpec({
             .map { Client(it.toString()).myToString() }
             .forEach { println(it) }
     }
-    val cnt = 100
-    val subCnt = 100000
+    val cnt = 10
+    val subCnt = 10
     test("generate ${cnt * subCnt} clients to file") {
-        val file = File("fileName")
+        val file = File("w/fileName")
         file.printWriter().use { out ->
 
-            for (i in 0..cnt) {
-
-                val runBlocking = runBlocking {
-                    val map = (i * subCnt..(i * subCnt) + subCnt - 1)
-                        .asFlow()
-                        .chunked(200)
-                        .map { qwe -> qwe.map { Client(it.toString()).myToString() } }
-//                        .reduce { accumulator, value -> accumulator + System.lineSeparator() + value }
-                        .toList()
-                        .joinToString(System.lineSeparator())
-
-                    map
-                }
-                out.println(runBlocking)
+            for (i in 0..cnt*subCnt) {
+                val myToString = Client(i.toString()).myToString()
+                out.println(myToString)
+//                val runBlocking = runBlocking {
+//                    val map = (i * subCnt..(i * subCnt) + subCnt - 1)
+//                        .asFlow()
+//                        .chunked(200)
+//                        .map { qwe -> qwe.map { Client(it.toString()).myToString() } }
+////                        .reduce { accumulator, value -> accumulator + System.lineSeparator() + value }
+//                        .toList()
+//                        .joinToString(System.lineSeparator())
+//
+//                    map
+//                }
+//                out.println(runBlocking)
 
             }
         }
@@ -59,17 +60,15 @@ class ClientTest : FunSpec({
 
         ( 0..cnt).asFlow()
             .collect { i ->
-
-
                     val map = (i * subCnt..(i * subCnt) + subCnt - 1)
                         .asFlow()
                         .chunked(200)
-                        .map { qwe -> qwe.map { Client(it.toString()).myToString() } }
+                        .map { qwe -> qwe.map { Client(it.toString()).myToString() }.joinToString(System.lineSeparator()) }
                         //                        .reduce { accumulator, value -> accumulator + System.lineSeparator() + value }
                         .toList()
                         .joinToString(System.lineSeparator())
 
-                val file = File("fileName_${i}")
+                val file = File("w/fileName_${i}")
                 file.printWriter().use { out ->
                     out.println(map)
                 }
