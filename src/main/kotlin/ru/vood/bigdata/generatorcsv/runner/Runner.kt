@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDateTime
 
-val cnt = 1000
+val cnt = 10
     val subCnt = 100000
     fun main() {
         println(LocalDateTime.now())
