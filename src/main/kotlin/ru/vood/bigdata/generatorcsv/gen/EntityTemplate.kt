@@ -32,16 +32,15 @@ abstract class EntityTemplate<ID_TYPE>(
                 val value = when(it.value.isSimpleType){
                     true -> it.value.function(idVal, it.key)()
                     false -> {
-                       "{"+ it.value.function(idVal, it.key)()+"}"
-//                        val value = it.value
-//                        val function = value.function as GenerateValueFunction<EntityTemplate<ID_TYPE>, *>
-//                        val any = function(
-//                            this,
-//                            it.key
-//                        )
-//                        val s = "{" + any().toString() + "}"
-//                        s
-
+//                       "{"+ it.value.function(idVal, it.key)()+"}"
+                        val value = it.value
+                        val function = value.function as GenerateValueFunction<EntityTemplate<ID_TYPE>, DataType<EntityTemplate<*>>>
+                        val any = function(
+                            this,
+                            it.key
+                        )()
+                        val s = "{" + any.toString() + "}"
+                        s
                     }
 
                 }
@@ -86,20 +85,19 @@ abstract class EntityTemplate<ID_TYPE>(
 
     fun stringRef() = PropBuilder<String>(isSimpleType = false)
 
-//    inline infix fun <  reified OUT_TYPE,> PropBuilder<OUT_TYPE>.genRef(
-//        crossinline f: GenerateValueFunction<EntityTemplate<ID_TYPE>, OUT_TYPE>
-//    ): PropBuilder<OUT_TYPE> {
-//        this.function =
-//            { idVal, parameterName ->
-//                object : DataType<OUT_TYPE> {
-//                    override fun invoke(): OUT_TYPE {
-//                        val value = this()
-//                        return f(value, parameterName)
-//                    }
-//                }
-//            }
-//        return this
-//    }
+    inline infix fun <  reified OUT_TYPE,> PropBuilder<OUT_TYPE>.genRef(
+        crossinline f: GenerateValueFunction<EntityTemplate<ID_TYPE>, OUT_TYPE>
+    ): PropBuilder<OUT_TYPE> {
+        this.function =
+            { idVal, parameterName ->
+                object : DataType<OUT_TYPE> {
+                    override fun invoke(): OUT_TYPE {
+                        return f(this@EntityTemplate, parameterName)
+                    }
+                }
+            }
+        return this
+    }
 
     fun PropBuilder<Boolean>.genBool(
     ): PropBuilder<Boolean> {
