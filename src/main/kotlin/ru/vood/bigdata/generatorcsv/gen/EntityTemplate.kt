@@ -29,24 +29,25 @@ abstract class EntityTemplate<ID_TYPE>(
     suspend fun myToString(/*id: ID_TYPE*/): String {
         val generate = generate(id()) { entityTemplate, idVal ->
             entityTemplate.meta.map {
-//                val value = when(it.value.isSimpleType){
-//                    true -> it.value.function(idVal, it.key)()
-//                    false -> {
+                val value = when(it.value.isSimpleType){
+                    true -> it.value.function(idVal, it.key)()
+                    false -> {
+                       "{"+ it.value.function(idVal, it.key)()+"}"
 //                        val value = it.value
 //                        val function = value.function as GenerateValueFunction<EntityTemplate<ID_TYPE>, *>
 //                        val any = function(
 //                            this,
 //                            it.key
 //                        )
-//                        val s = "{" + any.toString() + "}"
+//                        val s = "{" + any().toString() + "}"
 //                        s
-//                        ""
-//                    }
+
+                    }
+
+                }
 //
-//                }
-////
-//                it.key + "=" + value
-                it.key + "=" + it.value.function(idVal, it.key)()
+                it.key + "=" + value
+//                it.key + "=" + it.value.function(idVal, it.key)()
             }
                 .joinToString(", ")
 
@@ -82,6 +83,8 @@ abstract class EntityTemplate<ID_TYPE>(
             }
         return this
     }
+
+    fun stringRef() = PropBuilder<String>(isSimpleType = false)
 
 //    inline infix fun <  reified OUT_TYPE,> PropBuilder<OUT_TYPE>.genRef(
 //        crossinline f: GenerateValueFunction<EntityTemplate<ID_TYPE>, OUT_TYPE>

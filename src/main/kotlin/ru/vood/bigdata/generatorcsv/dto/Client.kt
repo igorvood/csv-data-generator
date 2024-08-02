@@ -1,5 +1,6 @@
 package ru.vood.bigdata.generatorcsv.dto
 
+import kotlinx.coroutines.runBlocking
 import ru.vood.bigdata.generatorcsv.gen.EntityTemplate
 import java.time.LocalDateTime
 import kotlin.math.abs
@@ -19,8 +20,9 @@ class Client(id: String) : EntityTemplate<String>(id) {
         LocalDateTime.of(1980, 1, 1, 1, 1).plusDays(abs(id.hashCode()).toLong())
     }
 
-//    private val accont by ref<ClientAccont>() genVal { id,paramName->
-//        ClientAccont(this)
-//    }
+    private val accont by stringRef() genVal { id,paramName->
+         val runBlocking = runBlocking { ClientAccont(this@Client).myToString() }
+        runBlocking
+    }
 
 }
