@@ -25,7 +25,7 @@ class Client(id: String) : EntityTemplate<String>(id) {
 //        runBlocking
 //    }
 
-    private val accont by ref<ClientAccont>() genVal { id,paramName->
+    private val accont by ref<ClientAccont>() genRef  { id,paramName->
         ClientAccont(this@Client)
     }
 

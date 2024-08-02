@@ -1,5 +1,6 @@
 package ru.vood.bigdata.generatorcsv.gen
 
+import kotlinx.coroutines.runBlocking
 import ru.vood.bigdata.generatorcsv.gen.dsl.*
 import java.math.BigDecimal
 import java.time.LocalDateTime
@@ -30,7 +31,10 @@ abstract class EntityTemplate<ID_TYPE>(
         val generate = generate(id()) { entityTemplate, idVal ->
             entityTemplate.meta.map {
                 val value = when(it.value.isSimpleType){
-                    true -> it.value.function(idVal, it.key)()
+                    true -> {
+                        val f = it.value.function
+                        it.value.function(idVal, it.key)()
+                    }
                     false -> {
 //                       "{"+ it.value.function(idVal, it.key)()+"}"
                         val value = it.value
@@ -39,7 +43,8 @@ abstract class EntityTemplate<ID_TYPE>(
                             this,
                             it.key
                         )()
-                        val s = "{" + any.toString() + "}"
+                        val string = runBlocking {   any.myToString()}
+                        val s = "{" + string + "}"
                         s
                     }
 
@@ -90,11 +95,8 @@ abstract class EntityTemplate<ID_TYPE>(
     ): PropBuilder<OUT_TYPE> {
         this.function =
             { idVal, parameterName ->
-                object : DataType<OUT_TYPE> {
-                    override fun invoke(): OUT_TYPE {
-                        return f(this@EntityTemplate, parameterName)
-                    }
-                }
+                val f1 = f(this@EntityTemplate, parameterName)
+                f1 as DataType<OUT_TYPE>
             }
         return this
     }
