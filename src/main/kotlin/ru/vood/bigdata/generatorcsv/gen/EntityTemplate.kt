@@ -26,7 +26,7 @@ abstract class EntityTemplate<ID_TYPE>(
 //            .sum().hashCode()
 //    }
 
-    override fun toString(/*id: ID_TYPE*/): String {
+    suspend fun myToString(/*id: ID_TYPE*/): String {
         val generate = generate(id()) { entityTemplate, idVal ->
             entityTemplate.meta.map {
 //                val value = when(it.value.isSimpleType){
