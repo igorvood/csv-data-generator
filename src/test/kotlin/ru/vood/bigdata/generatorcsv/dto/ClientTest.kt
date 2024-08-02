@@ -8,9 +8,9 @@ import java.io.File
 class ClientTest : FunSpec({
 
     test("pseudo random test") {
-        val client = Client("1")
-        client.toString() shouldBe Client("2").toString()
-        println(client.toString())
+        val client1 = Client("1").toString()
+        val client2 = Client("1").toString()
+        client1 shouldBe client2
     }
 
 //    val client = Client()

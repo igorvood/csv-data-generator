@@ -19,14 +19,33 @@ abstract class EntityTemplate<ID_TYPE>(
         override fun invoke(): ID_TYPE = id
     }
 
+//    override fun hashCode(): Int {
+//        return meta.map {
+//            it.value.function(id(), it.key)().toString().hashCode()
+//        }
+//            .sum().hashCode()
+//    }
+
     override fun toString(/*id: ID_TYPE*/): String {
         val generate = generate(id()) { entityTemplate, idVal ->
             entityTemplate.meta.map {
-//                when(it.value.isSimpleType){
+//                val value = when(it.value.isSimpleType){
 //                    true -> it.value.function(idVal, it.key)()
-//                    false -> it.
+//                    false -> {
+//                        val value = it.value
+//                        val function = value.function as GenerateValueFunction<EntityTemplate<ID_TYPE>, *>
+//                        val any = function(
+//                            this,
+//                            it.key
+//                        )
+//                        val s = "{" + any.toString() + "}"
+//                        s
+//                        ""
+//                    }
+//
 //                }
-//                val value =
+////
+//                it.key + "=" + value
                 it.key + "=" + it.value.function(idVal, it.key)()
             }
                 .joinToString(", ")
@@ -63,6 +82,21 @@ abstract class EntityTemplate<ID_TYPE>(
             }
         return this
     }
+
+//    inline infix fun <  reified OUT_TYPE,> PropBuilder<OUT_TYPE>.genRef(
+//        crossinline f: GenerateValueFunction<EntityTemplate<ID_TYPE>, OUT_TYPE>
+//    ): PropBuilder<OUT_TYPE> {
+//        this.function =
+//            { idVal, parameterName ->
+//                object : DataType<OUT_TYPE> {
+//                    override fun invoke(): OUT_TYPE {
+//                        val value = this()
+//                        return f(value, parameterName)
+//                    }
+//                }
+//            }
+//        return this
+//    }
 
     fun PropBuilder<Boolean>.genBool(
     ): PropBuilder<Boolean> {

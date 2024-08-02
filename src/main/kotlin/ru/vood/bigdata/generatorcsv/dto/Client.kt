@@ -5,21 +5,22 @@ import java.time.LocalDateTime
 import kotlin.math.abs
 
 class Client(id: String) : EntityTemplate<String>(id) {
-    val identity by string() genVal { id, paramName ->
+    private val identity by string() genVal { id, paramName ->
         paramName + "_"+id
     }
-    val name by string() genVal { id, paramName -> "name" + pseudoRandom(id.hashCode(), 20) } //getFun()// stdStr()
+    private val name by string() genVal { id, paramName -> "name" + pseudoRandom(id.hashCode(), 20) } //getFun()// stdStr()
 
-    val salary by number() genVal { id, paramName -> abs( identity(id).hashCode() % 1000000) .toBigDecimal() } //getFun()// stdStr()
+    private val salary by number() genVal { id, paramName -> abs( identity(id).hashCode() % 1000000) .toBigDecimal() } //getFun()// stdStr()
 
-    val isWorker by bool() genVal { id, paramName -> salary(id) .hashCode() % 2 ==1 } //getFun()// stdStr()
-    val isMarried by bool().genBool()
+    private val isWorker by bool() genVal { id, paramName -> salary(id) .hashCode() % 2 ==1 } //getFun()// stdStr()
+    private val isMarried by bool().genBool()
 
-    val birthDate by date() genVal { id, paramName ->
+    private val birthDate by date() genVal { id, paramName ->
         LocalDateTime.of(1980, 1, 1, 1, 1).plusDays(abs(id.hashCode()).toLong())
     }
 
-    val clientAccont = ru.vood.bigdata.generatorcsv.dto.ClientAccont(this)
-    val accont by ref<ClientAccont>() genVal { id,paramName-> clientAccont}
+    private val accont by ref<ClientAccont>() genVal { id,paramName->
+        ClientAccont(this)
+    }
 
 }
