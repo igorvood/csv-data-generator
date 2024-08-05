@@ -25,7 +25,7 @@ abstract class EntityTemplate<ID_TYPE>(
     }
 
      fun myToString(/*id: ID_TYPE*/): String {
-        val generate = generate(id()) { entityTemplate, idVal ->
+        val generate = generate { entityTemplate, idVal ->
             entityTemplate.meta.map {
                  when(it.value.isSimpleType){
                     true -> {
@@ -47,7 +47,7 @@ abstract class EntityTemplate<ID_TYPE>(
 
                 }
             }
-                .filter { !it.isBlank() }
+                .filter { it.isNotBlank() }
                 .joinToString(", ")
 
         }
@@ -56,8 +56,8 @@ abstract class EntityTemplate<ID_TYPE>(
 
     override fun invoke(): EntityTemplate<ID_TYPE> = this
 
-    fun generate(id: ID_TYPE, printFun: (EntityTemplate<ID_TYPE>, ID_TYPE )-> String ): String {
-        return printFun(this, id)
+    fun generate(printFun: (EntityTemplate<ID_TYPE>, ID_TYPE )-> String ): String {
+        return printFun(this, id())
     }
 
     internal fun addProp(metaProperty: MetaProperty<ID_TYPE, *>) {
