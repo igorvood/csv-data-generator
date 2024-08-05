@@ -7,6 +7,7 @@ import ru.vood.bigdata.generatorcsv.dto.Client
 import java.io.File
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
+import ru.vood.bigdata.generatorcsv.gen.ext.myToString
 import java.time.LocalDateTime
 
 val cnt = 10

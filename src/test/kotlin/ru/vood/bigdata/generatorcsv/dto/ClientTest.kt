@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import org.junit.jupiter.api.Assertions
 import ru.vood.bigdata.generatorcsv.gen.EntityTemplate
+import ru.vood.bigdata.generatorcsv.gen.ext.myToString
 import ru.vood.bigdata.generatorcsv.runner.chunked
 import java.io.File
 
@@ -33,8 +34,8 @@ class ClientTest : FunSpec({
             .map { Client(it.toString()).myToString() }
             .forEach { println(it) }
     }
-    val cnt = 1000
-    val subCnt = 10_000
+    val cnt = 10
+    val subCnt = 10
     val foldCl = "w/${fileClients}"
     val foldAcc = "w/${fileAcc}"
 

@@ -2,6 +2,7 @@ package ru.vood.bigdata.generatorcsv.gen
 
 import kotlinx.coroutines.runBlocking
 import ru.vood.bigdata.generatorcsv.gen.dsl.*
+import ru.vood.bigdata.generatorcsv.gen.ext.myToString
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.util.*
@@ -14,7 +15,7 @@ abstract class EntityTemplate<ID_TYPE>(
     id: ID_TYPE,
 ) : DataType<EntityTemplate<ID_TYPE>> {
 
-    private val meta: TreeMap<String, MetaProperty<ID_TYPE, *>> = TreeMap()
+    val meta: TreeMap<String, MetaProperty<ID_TYPE, *>> = TreeMap()
 
     val id: DataType<ID_TYPE> = object : DataType<ID_TYPE> {
         override fun invoke(): ID_TYPE = id
@@ -22,36 +23,6 @@ abstract class EntityTemplate<ID_TYPE>(
 
     override fun hashCode(): Int {
         return myToString().hashCode()
-    }
-
-     fun myToString(/*id: ID_TYPE*/): String {
-        val generate = generate { entityTemplate, idVal ->
-            entityTemplate.meta.map {
-                 when(it.value.isSimpleType){
-                    true -> {
-                        val f = it.value.function
-                        it.key + "=" + it.value.function(idVal, it.key)()
-                    }
-                    false -> {
-                        val value = it.value
-                        val function = value.function as GenerateValueFunction<EntityTemplate<ID_TYPE>, DataType<EntityTemplate<*>>>
-                        val any = function(
-                            this,
-                            it.key
-                        )()
-                        val string = runBlocking {   any.myToString()}
-                        val s = "{" + string + "}"
-                        s
-                        ""
-                    }
-
-                }
-            }
-                .filter { it.isNotBlank() }
-                .joinToString(", ")
-
-        }
-    return generate
     }
 
     override fun invoke(): EntityTemplate<ID_TYPE> = this
