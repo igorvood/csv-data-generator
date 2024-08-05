@@ -17,13 +17,8 @@ data class MetaProperty<ID_TYPE, OUT_TYPE>(
     val function: GenerateValueFunction<ID_TYPE, DataType<OUT_TYPE>>,
     val isSimpleType: Boolean
 ) : (ID_TYPE) -> OUT_TYPE
-//,Comparable<MetaProperty<ID_TYPE, OUT_TYPE>>/* Comparator<MetaProperty<ID_TYPE, OUT_TYPE>>*/
 {
     override fun invoke(p1: ID_TYPE): OUT_TYPE = function(p1, paramName)()
-    /* override fun compareTo(other: MetaProperty<ID_TYPE, OUT_TYPE>): Int {
-         return this.name.compareTo(other.name)
-     }*/
-
 }
 
 data class MetaCheck<T>(

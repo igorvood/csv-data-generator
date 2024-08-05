@@ -20,11 +20,6 @@ class Client(id: String) : EntityTemplate<String>(id) {
         LocalDateTime.of(1980, 1, 1, 1, 1).plusDays(abs(id.hashCode()).toLong())
     }
 
-//    private val accont by stringRef() genVal { id,paramName->
-//         val runBlocking = runBlocking { ClientAccont(this@Client).myToString() }
-//        runBlocking
-//    }
-
     val accont by ref<ClientAccont>() genRef  { id,paramName->
         ClientAccont(this@Client)
     }
