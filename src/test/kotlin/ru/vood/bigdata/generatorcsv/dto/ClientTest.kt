@@ -7,9 +7,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.launch
 import org.junit.jupiter.api.Assertions
 import ru.vood.bigdata.generatorcsv.gen.EntityTemplate
+import ru.vood.bigdata.generatorcsv.gen.ext.extracted
 import ru.vood.bigdata.generatorcsv.gen.ext.myToString
 import ru.vood.bigdata.generatorcsv.runner.chunked
 import java.io.File
@@ -85,8 +85,8 @@ class ClientTest : FunSpec({
             .map { it.accont(it.id()) }
 //            .map { it.map { it.accont(it.id()) } }
 
-        val launch = async { extracted(clientFlow, File("${foldCl}_paralel")) }
-        val launch1 = async { extracted(accontFlow, File("${foldAcc}_paralel")) }
+        val launch = async { extracted(clientFlow, File("${foldCl}_paralel"), EntityTemplate<String>::myToString) }
+        val launch1 = async { extracted(accontFlow, File("${foldAcc}_paralel"), EntityTemplate<Client>::myToString) }
         launch.await()
         launch1.await()
 
@@ -95,25 +95,5 @@ class ClientTest : FunSpec({
 
 })
 
-private suspend fun <ID_TYPE> extracted(
-    map1: Flow<EntityTemplate<ID_TYPE>>,
-    file: File
-) {
-    val joinToString = map1
-        .map { cl -> cl.myToString() }
-        .toList()
-        .joinToString(System.lineSeparator())
-    file.printWriter().use { out ->
-                out.println(joinToString)
-            }
-//        .collect { fl ->
-//            val map = fl
-//                .map { cl -> cl.myToString() }
-//                .joinToString(System.lineSeparator())
-//
-//            file.printWriter().use { out ->
-//                out.println(map)
-//            }
-//        }
-}
+
 
