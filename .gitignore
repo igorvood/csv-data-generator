@@ -5,3 +5,4 @@ w
 /app-generator/build
 /app-loader/build
 /flow-util/build
+/app-loader/src/main/resources/clients.csv_paralel
