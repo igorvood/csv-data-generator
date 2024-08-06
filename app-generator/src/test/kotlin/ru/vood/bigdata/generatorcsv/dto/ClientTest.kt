@@ -7,10 +7,10 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import org.junit.jupiter.api.Assertions
+import ru.vood.bigdata.generatorcsv.flow.util.chunked
 import ru.vood.bigdata.generatorcsv.gen.EntityTemplate
 import ru.vood.bigdata.generatorcsv.gen.ext.extracted
 import ru.vood.bigdata.generatorcsv.gen.ext.myToString
-import ru.vood.bigdata.generatorcsv.runner.chunked
 import java.io.File
 
 class ClientTest : FunSpec({

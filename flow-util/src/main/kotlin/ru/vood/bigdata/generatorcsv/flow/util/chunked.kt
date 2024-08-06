@@ -1,4 +1,4 @@
-package ru.vood.bigdata.generatorcsv.runner
+package ru.vood.bigdata.generatorcsv.flow.util
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

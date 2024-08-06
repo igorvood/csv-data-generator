@@ -1,13 +1,14 @@
 package ru.vood.bigdata.generatorcsv.runner
 
 import kotlinx.coroutines.Dispatchers
-import org.springframework.boot.CommandLineRunner
-import org.springframework.stereotype.Service
-import ru.vood.bigdata.generatorcsv.dto.Client
-import java.io.File
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
+import ru.vood.bigdata.generatorcsv.dto.Client
+import ru.vood.bigdata.generatorcsv.flow.util.chunked
 import ru.vood.bigdata.generatorcsv.gen.ext.myToString
+import java.io.File
 import java.time.LocalDateTime
 
 val cnt = 10

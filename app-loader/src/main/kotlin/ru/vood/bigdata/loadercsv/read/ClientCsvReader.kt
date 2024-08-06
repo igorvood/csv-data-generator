@@ -21,7 +21,15 @@ class ClientCsvReader {
                 val isMarried = split[3]
                 val name = split[4]
                 val salary = split[5]
-                emit(Client(identity, name, salary.toLong(),isWorker.toBoolean(), isMarried.toBoolean(), LocalDateTime.parse(birthDate)))
+                emit(Client().apply {
+                    this.identity = identity
+                    this.name = name
+                    this.salary = salary.toLong()
+                    this.isWorker = isWorker.toBoolean()
+                    this.isMarried = isMarried.toBoolean()
+                    this.birthDate = LocalDateTime.parse(birthDate)
+                })
+
             }
         }
     }
