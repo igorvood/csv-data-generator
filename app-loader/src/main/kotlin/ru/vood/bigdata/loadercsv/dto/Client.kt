@@ -1,10 +1,6 @@
 package ru.vood.bigdata.loadercsv.dto
 
-import jakarta.persistence.Column
-import jakarta.persistence.Embedded
-import jakarta.persistence.EmbeddedId
-import jakarta.persistence.Entity
-import jakarta.persistence.Table
+import jakarta.persistence.*
 import java.time.LocalDateTime
 
 @Entity
@@ -20,19 +16,21 @@ public class Client(){
 //
 //    }
 
-    @EmbeddedId
+//    @EmbeddedId
+    @Id
+    @Column(name = "id")
     lateinit var  identity: String
     @Column
     lateinit var name: String
     @Column
     var salary: Long=0
 
-    @Column
+    @Column(name = "isworker")
     var isWorker: Boolean=false
-    @Column
+    @Column(name = "ismarried")
     var isMarried: Boolean=false
 
-    @Column
+    @Column(name = "birthdate")
     lateinit var birthDate: LocalDateTime
 
 }

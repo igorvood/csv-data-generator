@@ -8,3 +8,14 @@ spring:
     enabled: true
     change-log: liquibase/changelog.xml
     drop-first: true
+  jpa:
+    properties:
+      hibernate:
+#        generate_statistics: true
+        jdbc:
+          batch_size: 1000
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
