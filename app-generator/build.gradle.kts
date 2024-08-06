@@ -33,6 +33,11 @@ dependencies {
 //    testImplementation( "io.kotest:kotest-runner-junit5:$version")
 }
 
+springBoot {
+    this.mainClass = "ru.vood.bigdata.generatorcsv.GeneratorCsvApplicationKt"
+
+}
+
 kotlin {
     compilerOptions {
         freeCompilerArgs.addAll("-Xjsr305=strict")

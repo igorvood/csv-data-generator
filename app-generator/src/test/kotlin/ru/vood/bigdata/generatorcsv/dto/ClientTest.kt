@@ -15,6 +15,13 @@ import java.io.File
 
 class ClientTest : FunSpec({
 
+    val fileClients = "clients"
+    val fileAcc = "acc"
+    val cnt = 10
+    val subCnt = 10
+    val foldCl = "w/${fileClients}"
+    val foldAcc = "w/${fileAcc}"
+
     test("pseudo random test") {
         val client1 = Client("1").myToString()
         val client2 = Client("1").myToString()
@@ -26,17 +33,12 @@ class ClientTest : FunSpec({
         Assertions.assertNotEquals(Client("1").myToString(), Client("2").myToString())
     }
 
-    val fileClients = "clients"
-    val fileAcc = "acc"
     test("generate 10 $fileClients") {
         (1..10)
             .map { Client(it.toString()).myToString() }
             .forEach { println(it) }
     }
-    val cnt = 10
-    val subCnt = 10
-    val foldCl = "w/${fileClients}"
-    val foldAcc = "w/${fileAcc}"
+
 
     test("generate ${cnt * subCnt} $fileClients to file") {
         val file = File(foldCl)

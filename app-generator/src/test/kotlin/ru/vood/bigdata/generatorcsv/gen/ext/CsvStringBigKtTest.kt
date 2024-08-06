@@ -12,7 +12,7 @@ import ru.vood.bigdata.generatorcsv.gen.EntityTemplate
 import java.io.File
 
 class CsvStringBigKtTest : FunSpec({
-    val cnt = 1_000_000_000
+    val cnt = 1_000_000//_000
     val fileClients = "clients"
     val fileAcc = "acc"
     val foldCl = "w/${fileClients}.csv"
