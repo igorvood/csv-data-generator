@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/db_configuration_manager
+    username: db_configuration_manager_admin
+    password: qwerty
+  liquibase:
+    enabled: true
+    change-log: liquibase/changelog.xml
+    drop-first: true

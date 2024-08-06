@@ -17,7 +17,7 @@ class Client(id: String) : EntityTemplate<String>(id) {
     private val isMarried by bool().genBool()
 
     private val birthDate by date() genVal { id, paramName ->
-        LocalDateTime.of(1980, 1, 1, 1, 1).plusDays(abs(id.hashCode()).toLong())
+        LocalDateTime.of(1980, 1, 1, 1, 1).plusDays(abs(id.hashCode() % 10000).toLong())
     }
 
     val accont by ref<ClientAccont>() genRef  { id,paramName->
