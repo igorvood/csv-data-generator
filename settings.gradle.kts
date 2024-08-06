@@ -1,3 +1,6 @@
 rootProject.name = "generator-csv"
 
-include("app-generator")
+include(
+    "app-generator",
+    "app-loader"
+)
