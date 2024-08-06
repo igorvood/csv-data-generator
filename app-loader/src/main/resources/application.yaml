@@ -7,13 +7,15 @@ spring:
   liquibase:
     enabled: true
     change-log: liquibase/changelog.xml
-    drop-first: true
+#    drop-first: true
   jpa:
     properties:
       hibernate:
-#        generate_statistics: true
+        #        generate_statistics: true
         jdbc:
           batch_size: 1000
+        order_updates: true
+#        format_sql: true
 logging:
   level:
     org:

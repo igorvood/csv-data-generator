@@ -30,9 +30,9 @@ open class Runner(
     override fun run(vararg args: String?) {
 
         val inputStream =
-            File("/home/vood/IdeaProjects/csv-data-generator/app-generator/w/clients.csv_paralel").inputStream()
+            File("/home/vood/IdeaProjects/csv-data-generator/app-loader/src/main/resources/clients.csv_paralel").inputStream()
 
-//        clientRepository.deleteAllInBatch()
+        clientRepository.deleteAllInBatch()
         val readCsv = clientCsvReader.readCsv(inputStream)
         val begin = LocalDateTime.now()
         runBlocking(Dispatchers.IO) {
