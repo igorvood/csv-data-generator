@@ -17,8 +17,7 @@ import java.io.File
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
-@Service
-@Transactional
+//@Service
 open class Runner(
     private val clientCsvReader : ClientCsvReader,
     private val clientRepository: ClientRepository,
