@@ -4,12 +4,11 @@ import ru.vood.bigdata.generatorcsv.gen.DataType
 import ru.vood.bigdata.generatorcsv.gen.EntityTemplate
 import ru.vood.bigdata.generatorcsv.gen.dsl.GenerateValueFunction
 
-fun <ID_TYPE> EntityTemplate<ID_TYPE>.jsonString(/*id: ID_TYPE*/): String {
+fun <ID_TYPE> EntityTemplate<ID_TYPE>.jsonString(): String {
     val generate = generate { entityTemplate, idVal ->
         val joinToString = entityTemplate.meta.map {
             when (it.value.isSimpleType to it.value.isList) {
                 (true to false) -> {
-                    val f = it.value.function
                     """"${it.key}"""" + " : " + """"${it.value.function(idVal, it.key)()}""""
                 }
 
