@@ -1,6 +1,9 @@
 package ru.vood.bigdata.generatorcsv.gen
 
-import ru.vood.bigdata.generatorcsv.gen.dsl.*
+import ru.vood.bigdata.generatorcsv.gen.dsl.Builder
+import ru.vood.bigdata.generatorcsv.gen.dsl.FieldName
+import ru.vood.bigdata.generatorcsv.gen.dsl.GenerateValueFunction
+import ru.vood.bigdata.generatorcsv.gen.dsl.MetaProperty
 import ru.vood.bigdata.generatorcsv.gen.ext.myToString
 import java.math.BigDecimal
 import java.time.LocalDateTime
@@ -26,7 +29,7 @@ abstract class EntityTemplate<ID_TYPE>(
 
     override fun invoke(): EntityTemplate<ID_TYPE> = this
 
-    fun generate(printFun: (EntityTemplate<ID_TYPE>, ID_TYPE )-> String ): String {
+    fun generate(printFun: (EntityTemplate<ID_TYPE>, ID_TYPE) -> String): String {
         return printFun(this, id())
     }
 
@@ -38,7 +41,7 @@ abstract class EntityTemplate<ID_TYPE>(
     fun number() = PropBuilder<BigDecimal>(isSimpleType = true, isList = false)
     fun date() = PropBuilder<LocalDateTime>(isSimpleType = true, isList = false)
     fun bool() = PropBuilder<Boolean>(isSimpleType = true, isList = false)
-    inline fun <reified Z, E: EntityTemplate<Z>> ref() = RefBuilder<E>(isSimpleType = false, isList = false)
+    inline fun <reified Z, E : EntityTemplate<Z>> ref() = RefBuilder<E>(isSimpleType = false, isList = false)
     inline fun <reified Z> list() = ListBuilder<List<Z>>(isSimpleType = false, isList = true)
 
     inline infix fun <reified OUT_TYPE> PropBuilder<OUT_TYPE>.genVal(
@@ -55,7 +58,7 @@ abstract class EntityTemplate<ID_TYPE>(
 
     fun stringRef() = PropBuilder<String>(isSimpleType = false, isList = false)
 
-    inline infix fun <  reified OUT_TYPE> RefBuilder<OUT_TYPE>.genRef(
+    inline infix fun <reified OUT_TYPE> RefBuilder<OUT_TYPE>.genRef(
         crossinline f: GenerateValueFunction<EntityTemplate<ID_TYPE>, OUT_TYPE>
     ): PropBuilder<OUT_TYPE> {
         this.function =
@@ -108,13 +111,13 @@ abstract class EntityTemplate<ID_TYPE>(
     }
 
     inner class RefBuilder<R>(
-         name: FieldName = "",
-         function: GenerateValueFunction<ID_TYPE, DataType<R>> = { _, _ ->
+        name: FieldName = "",
+        function: GenerateValueFunction<ID_TYPE, DataType<R>> = { _, _ ->
             error("Необходимо определить ф-цию в мете для поля $name ")
         },
-         isSimpleType: Boolean,
-         isList: Boolean
-    ): PropBuilder<R>(name,function,isSimpleType,isList)
+        isSimpleType: Boolean,
+        isList: Boolean
+    ) : PropBuilder<R>(name, function, isSimpleType, isList)
 
     open inner class ListBuilder<R>(
         name: FieldName = "",
@@ -123,7 +126,7 @@ abstract class EntityTemplate<ID_TYPE>(
         },
         isSimpleType: Boolean,
         isList: Boolean
-    ): PropBuilder<R>(name,function,isSimpleType,isList)
+    ) : PropBuilder<R>(name, function, isSimpleType, isList)
 
 }
 
