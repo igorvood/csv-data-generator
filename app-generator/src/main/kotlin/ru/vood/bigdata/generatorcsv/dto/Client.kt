@@ -40,8 +40,7 @@ class Client(id: String) : EntityTemplate<String>(id) {
         clientAccont
     }
 
-    val refList = refList<String, ClientAccont>()
-    val acconts by refList genListRef { id, paramName ->
+    val acconts by refList<String, ClientAccont>() genListRef { id, paramName ->
         val map = (1..abs(id.hashCode() % 20))
             .map {
                 ClientAccont(this.id.invoke() + "_" + it.toString())
