@@ -15,7 +15,7 @@ class Client(id: String) : EntityTemplate<String>(id) {
         )
     } //getFun()// stdStr()
 
-    private val childrenNames by list<String>() genVal { id, paramName ->
+    private val childrenNames by list<String>() genList { id, paramName ->
         (1.. abs(id.hashCode() %20))
             .map {
 
