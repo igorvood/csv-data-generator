@@ -39,7 +39,7 @@ abstract class EntityTemplate<ID_TYPE>(
     fun number() = PropBuilder<BigDecimal>(isSimpleType = true, isList = false)
     fun date() = PropBuilder<LocalDateTime>(isSimpleType = true, isList = false)
     fun bool() = PropBuilder<Boolean>(isSimpleType = true, isList = false)
-    inline fun <reified Z> ref() = PropBuilder<Z>(isSimpleType = false, isList = false)
+    inline fun <reified Z> ref() = RefBuilder<Z>(isSimpleType = false, isList = false)
     inline fun <reified Z> set() = PropBuilder<Set<Z>>(isSimpleType = false, isList = false)
 
     inline infix fun <reified OUT_TYPE> PropBuilder<OUT_TYPE>.genVal(
@@ -56,7 +56,7 @@ abstract class EntityTemplate<ID_TYPE>(
 
     fun stringRef() = PropBuilder<String>(isSimpleType = false, isList = false)
 
-    inline infix fun <  reified OUT_TYPE,> PropBuilder<OUT_TYPE>.genRef(
+    inline infix fun <  reified OUT_TYPE,> RefBuilder<OUT_TYPE>.genRef(
         crossinline f: GenerateValueFunction<EntityTemplate<ID_TYPE>, OUT_TYPE>
     ): PropBuilder<OUT_TYPE> {
         this.function =
@@ -81,7 +81,7 @@ abstract class EntityTemplate<ID_TYPE>(
         return this
     }
 
-    inner class PropBuilder<R>(
+    open inner class PropBuilder<R>(
         var name: FieldName = "",
         var function: GenerateValueFunction<ID_TYPE, DataType<R>> = { _, _ ->
             error("Необходимо определить ф-цию в мете для поля $name ")
@@ -107,6 +107,15 @@ abstract class EntityTemplate<ID_TYPE>(
 
         override fun build(): MetaProperty<ID_TYPE, R> = MetaProperty(name, function, isSimpleType, isList)
     }
+
+    inner class RefBuilder<R>(
+         name: FieldName = "",
+         function: GenerateValueFunction<ID_TYPE, DataType<R>> = { _, _ ->
+            error("Необходимо определить ф-цию в мете для поля $name ")
+        },
+         isSimpleType: Boolean,
+         isList: Boolean
+    ): PropBuilder<R>(name,function,isSimpleType,isList)
 
 }
 
