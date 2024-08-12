@@ -36,7 +36,7 @@ class CsvStringBigKtTest : FunSpec({
                 async {
                     extracted(
                         accontFlow,
-                        File("${foldAcc}_paralel"), EntityTemplate<Client>::csvStringBig
+                        File("${foldAcc}_paralel"), EntityTemplate<String>::csvStringBig
                     )
                 }
             )
