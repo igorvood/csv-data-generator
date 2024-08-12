@@ -35,9 +35,6 @@ fun <ID_TYPE> EntityTemplate<ID_TYPE>.jsonString(/*id: ID_TYPE*/): String {
                         .joinToString(",\n")
 
                     "\"${it.key}\":[$joinToString]"
-
-
-
                 }
                 (false to true) -> error("пока массив ссылок не описан")
                 else -> error("невозможный кез")
