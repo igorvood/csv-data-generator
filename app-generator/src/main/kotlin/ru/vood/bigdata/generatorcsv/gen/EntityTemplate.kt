@@ -1,6 +1,5 @@
 package ru.vood.bigdata.generatorcsv.gen
 
-import kotlinx.coroutines.runBlocking
 import ru.vood.bigdata.generatorcsv.gen.dsl.*
 import ru.vood.bigdata.generatorcsv.gen.ext.myToString
 import java.math.BigDecimal
@@ -40,7 +39,7 @@ abstract class EntityTemplate<ID_TYPE>(
     fun date() = PropBuilder<LocalDateTime>(isSimpleType = true, isList = false)
     fun bool() = PropBuilder<Boolean>(isSimpleType = true, isList = false)
     inline fun <reified Z, E: EntityTemplate<Z>> ref() = RefBuilder<E>(isSimpleType = false, isList = false)
-    inline fun <reified Z> set() = PropBuilder<Set<Z>>(isSimpleType = false, isList = false)
+    inline fun <reified Z> list() = ListBuilder<List<Z>>(isSimpleType = false, isList = false)
 
     inline infix fun <reified OUT_TYPE> PropBuilder<OUT_TYPE>.genVal(
         crossinline f: GenerateValueFunction<ID_TYPE, OUT_TYPE>
@@ -115,6 +114,15 @@ abstract class EntityTemplate<ID_TYPE>(
         },
          isSimpleType: Boolean,
          isList: Boolean
+    ): PropBuilder<R>(name,function,isSimpleType,isList)
+
+    open inner class ListBuilder<R>(
+        name: FieldName = "",
+        function: GenerateValueFunction<ID_TYPE, DataType<R>> = { _, _ ->
+            error("Необходимо определить ф-цию в мете для поля $name ")
+        },
+        isSimpleType: Boolean,
+        isList: Boolean
     ): PropBuilder<R>(name,function,isSimpleType,isList)
 
 }
