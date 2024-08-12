@@ -40,4 +40,15 @@ class Client(id: String) : EntityTemplate<String>(id) {
         clientAccont
     }
 
+//    val acconts by refList<Client, ClientAccont>() genRef { id, paramName ->
+//        val map = (1..abs(id.hashCode() % 20))
+//            .map {
+//                ClientAccont(this@Client)
+//            }
+//
+//
+//        val clientAccont: ClientAccont = ClientAccont(this@Client)
+//        map
+//    }
+
 }

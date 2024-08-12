@@ -42,6 +42,8 @@ abstract class EntityTemplate<ID_TYPE>(
     fun date() = PropBuilder<LocalDateTime>(isSimpleType = true, isList = false)
     fun bool() = PropBuilder<Boolean>(isSimpleType = true, isList = false)
     inline fun <reified Z, E : EntityTemplate<Z>> ref() = RefBuilder<E>(isSimpleType = false, isList = false)
+
+    inline fun <reified Z, E : EntityTemplate<Z>> refList() = RefBuilder<List<E>>(isSimpleType = false, isList = true)
     inline fun <reified Z> list() = ListBuilder<List<Z>>(isSimpleType = true, isList = true)
 
     inline infix fun <reified OUT_TYPE> PropBuilder<OUT_TYPE>.genVal(

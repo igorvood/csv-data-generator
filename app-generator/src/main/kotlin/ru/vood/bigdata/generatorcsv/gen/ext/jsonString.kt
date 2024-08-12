@@ -27,16 +27,23 @@ fun <ID_TYPE> EntityTemplate<ID_TYPE>.jsonString(/*id: ID_TYPE*/): String {
                 }
 
                 (true to true) -> {
-                    val value = it.value
                     val function1 = it.value.function(idVal, it.key)() as List<Any>
-
                     val joinToString = function1
                         .map { "\"${it.toString()}\"" }
                         .joinToString(",\n")
 
                     "\"${it.key}\":[$joinToString]"
                 }
-                (false to true) -> error("пока массив ссылок не описан")
+                (false to true) -> {
+                    val value = it.value
+
+                    val function =
+                        it.value.function as GenerateValueFunction<EntityTemplate<ID_TYPE>, DataType<List<EntityTemplate<*>>>>
+
+                    val function1 = function(this, it.key) //as List<Any>
+                    println(value.isList)
+                    error("пока массив ссылок не описан")
+                }
                 else -> error("невозможный кез")
             }
         }

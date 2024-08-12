@@ -28,8 +28,8 @@ fun <ID_TYPE> EntityTemplate<ID_TYPE>.myToString(/*id: ID_TYPE*/): String {
                     ""
                 }
 
-                (true to true) -> error("пока массив простых типов не описан")
-                (false to true) -> error("пока массив ссылок не описан")
+                (true to true) -> ""
+                (false to true) -> ""
                 else -> error("невозможный кез")
             }
         }
