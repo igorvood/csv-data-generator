@@ -22,7 +22,7 @@ class JsonStringBigKtTest : FunSpec({
     test("jsonStringBig") {
 
 
-            println(Client("0").jsonString())
+            println(Client("asdfgdfsgsdfgdfg").jsonString())
 
 
 

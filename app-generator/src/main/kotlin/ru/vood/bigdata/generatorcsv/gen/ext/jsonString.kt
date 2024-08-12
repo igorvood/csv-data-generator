@@ -39,10 +39,16 @@ fun <ID_TYPE> EntityTemplate<ID_TYPE>.jsonString(/*id: ID_TYPE*/): String {
 
                     val function =
                         it.value.function as GenerateValueFunction<EntityTemplate<ID_TYPE>, DataType<List<EntityTemplate<*>>>>
-
-                    val function1 = function(this, it.key) //as List<Any>
-                    println(value.isList)
-                    error("пока массив ссылок не описан")
+//                    GenerateValueFunction<EntityTemplate<ID_TYPE>, List<OUT_TYPE>>
+                    val invoke = function(this, it.key).invoke()
+                    val joinToString = invoke
+                        .map { it.jsonString() }
+//                        .map { "{$it}" }
+                        .joinToString(",")
+                    "\"${it.key}\":[$joinToString]"
+//                    val function1 = function(this, it.key) //as List<Any>
+//                    println(value.isList)
+//                    error("пока массив ссылок не описан")
                 }
                 else -> error("невозможный кез")
             }

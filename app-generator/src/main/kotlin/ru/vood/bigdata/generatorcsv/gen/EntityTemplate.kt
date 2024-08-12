@@ -58,6 +58,31 @@ abstract class EntityTemplate<ID_TYPE>(
         return this
     }
 
+    inline infix fun <reified OUT_TYPE> RefBuilder<OUT_TYPE>.genRef(
+        crossinline f: GenerateValueFunction<EntityTemplate<ID_TYPE>, OUT_TYPE>
+    ): PropBuilder<OUT_TYPE> {
+        this.function =
+            { idVal, parameterName ->
+                val f1 = f(this@EntityTemplate, parameterName)
+                f1 as DataType<OUT_TYPE>
+            }
+        return this
+    }
+
+    inline infix fun <reified OUT_TYPE> RefBuilder<List<OUT_TYPE>>.genListRef(
+        crossinline f: GenerateValueFunction<EntityTemplate<ID_TYPE>, List<OUT_TYPE>>
+    ): PropBuilder<List<OUT_TYPE>> {
+        this.function =
+            { idVal, parameterName ->
+                val value = object : DataType<List<OUT_TYPE>> {
+                    override fun invoke(): List<OUT_TYPE> = f(this@EntityTemplate, parameterName) as List<OUT_TYPE>
+                }
+//                val f1 = f(this@EntityTemplate, parameterName)
+                value
+            }
+        return this
+    }
+
     inline infix fun <reified OUT_TYPE> ListBuilder<OUT_TYPE>.genList(
         crossinline f: GenerateValueFunction<ID_TYPE, OUT_TYPE>
     ): PropBuilder<OUT_TYPE> {
@@ -72,16 +97,7 @@ abstract class EntityTemplate<ID_TYPE>(
 
     fun stringRef() = PropBuilder<String>(isSimpleType = false, isList = false)
 
-    inline infix fun <reified OUT_TYPE> RefBuilder<OUT_TYPE>.genRef(
-        crossinline f: GenerateValueFunction<EntityTemplate<ID_TYPE>, OUT_TYPE>
-    ): PropBuilder<OUT_TYPE> {
-        this.function =
-            { idVal, parameterName ->
-                val f1 = f(this@EntityTemplate, parameterName)
-                f1 as DataType<OUT_TYPE>
-            }
-        return this
-    }
+
 
     fun PropBuilder<Boolean>.genBool(
     ): PropBuilder<Boolean> {
