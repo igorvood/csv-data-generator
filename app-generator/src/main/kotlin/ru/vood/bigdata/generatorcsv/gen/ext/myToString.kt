@@ -8,12 +8,12 @@ import ru.vood.bigdata.generatorcsv.gen.dsl.GenerateValueFunction
 fun<ID_TYPE> EntityTemplate<ID_TYPE>.myToString(/*id: ID_TYPE*/): String {
     val generate = generate { entityTemplate, idVal ->
         entityTemplate.meta.map {
-            when(it.value.isSimpleType){
-                true -> {
+            when(it.value.isSimpleType to it.value.isList){
+                (true to false) -> {
                     val f = it.value.function
                     it.key + "=" + it.value.function(idVal, it.key)()
                 }
-                false -> {
+                (false to false) -> {
                     val value = it.value
                     val function = value.function as GenerateValueFunction<EntityTemplate<ID_TYPE>, DataType<EntityTemplate<*>>>
                     val any = function(
@@ -25,7 +25,9 @@ fun<ID_TYPE> EntityTemplate<ID_TYPE>.myToString(/*id: ID_TYPE*/): String {
                     s
                     ""
                 }
-
+                (true to true) -> error("пока массив простых типов не описан")
+                (false to true) -> error("пока массив ссылок не описан")
+else ->error("невозможный кез")
             }
         }
             .filter { it.isNotBlank() }
