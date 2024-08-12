@@ -15,7 +15,8 @@ data class MetaEntity<ID_TYPE>
 data class MetaProperty<ID_TYPE, OUT_TYPE>(
     val paramName: FieldName,
     val function: GenerateValueFunction<ID_TYPE, DataType<OUT_TYPE>>,
-    val isSimpleType: Boolean
+    val isSimpleType: Boolean,
+    val isList: Boolean,
 ) : (ID_TYPE) -> OUT_TYPE
 {
     override fun invoke(p1: ID_TYPE): OUT_TYPE = function(p1, paramName)()

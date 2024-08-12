@@ -35,12 +35,12 @@ abstract class EntityTemplate<ID_TYPE>(
         meta[metaProperty.paramName] = metaProperty
     }
 
-    fun string() = PropBuilder<String>(isSimpleType = true)
-    fun number() = PropBuilder<BigDecimal>(isSimpleType = true)
-    fun date() = PropBuilder<LocalDateTime>(isSimpleType = true)
-    fun bool() = PropBuilder<Boolean>(isSimpleType = true)
-    inline fun <reified Z> ref() = PropBuilder<Z>(isSimpleType = false)
-    inline fun <reified Z> set() = PropBuilder<Set<Z>>(isSimpleType = false)
+    fun string() = PropBuilder<String>(isSimpleType = true, isList = false)
+    fun number() = PropBuilder<BigDecimal>(isSimpleType = true, isList = false)
+    fun date() = PropBuilder<LocalDateTime>(isSimpleType = true, isList = false)
+    fun bool() = PropBuilder<Boolean>(isSimpleType = true, isList = false)
+    inline fun <reified Z> ref() = PropBuilder<Z>(isSimpleType = false, isList = false)
+    inline fun <reified Z> set() = PropBuilder<Set<Z>>(isSimpleType = false, isList = false)
 
     inline infix fun <reified OUT_TYPE> PropBuilder<OUT_TYPE>.genVal(
         crossinline f: GenerateValueFunction<ID_TYPE, OUT_TYPE>
@@ -54,7 +54,7 @@ abstract class EntityTemplate<ID_TYPE>(
         return this
     }
 
-    fun stringRef() = PropBuilder<String>(isSimpleType = false)
+    fun stringRef() = PropBuilder<String>(isSimpleType = false, isList = false)
 
     inline infix fun <  reified OUT_TYPE,> PropBuilder<OUT_TYPE>.genRef(
         crossinline f: GenerateValueFunction<EntityTemplate<ID_TYPE>, OUT_TYPE>
@@ -86,7 +86,8 @@ abstract class EntityTemplate<ID_TYPE>(
         var function: GenerateValueFunction<ID_TYPE, DataType<R>> = { _, _ ->
             error("Необходимо определить ф-цию в мете для поля $name ")
         },
-        var isSimpleType: Boolean
+        val isSimpleType: Boolean,
+        val isList: Boolean
     ) : Builder<MetaProperty<ID_TYPE, R>>
 //where ET: EntityTemplate<Any>
     {
@@ -104,7 +105,7 @@ abstract class EntityTemplate<ID_TYPE>(
 
         }
 
-        override fun build(): MetaProperty<ID_TYPE, R> = MetaProperty(name, function, isSimpleType)
+        override fun build(): MetaProperty<ID_TYPE, R> = MetaProperty(name, function, isSimpleType, isList)
     }
 
 }
