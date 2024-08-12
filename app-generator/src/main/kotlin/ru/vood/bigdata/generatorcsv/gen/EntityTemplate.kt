@@ -95,9 +95,6 @@ abstract class EntityTemplate<ID_TYPE>(
         return this
     }
 
-    fun stringRef() = PropBuilder<String>(isSimpleType = false, isList = false)
-
-
     fun PropBuilder<Boolean>.genBool(
     ): PropBuilder<Boolean> {
         this.function =
