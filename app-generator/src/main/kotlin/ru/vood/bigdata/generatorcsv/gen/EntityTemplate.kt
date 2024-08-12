@@ -42,9 +42,21 @@ abstract class EntityTemplate<ID_TYPE>(
     fun date() = PropBuilder<LocalDateTime>(isSimpleType = true, isList = false)
     fun bool() = PropBuilder<Boolean>(isSimpleType = true, isList = false)
     inline fun <reified Z, E : EntityTemplate<Z>> ref() = RefBuilder<E>(isSimpleType = false, isList = false)
-    inline fun <reified Z> list() = ListBuilder<List<Z>>(isSimpleType = false, isList = true)
+    inline fun <reified Z> list() = ListBuilder<List<Z>>(isSimpleType = true, isList = true)
 
     inline infix fun <reified OUT_TYPE> PropBuilder<OUT_TYPE>.genVal(
+        crossinline f: GenerateValueFunction<ID_TYPE, OUT_TYPE>
+    ): PropBuilder<OUT_TYPE> {
+        this.function =
+            { idVal, parameterName ->
+                object : DataType<OUT_TYPE> {
+                    override fun invoke(): OUT_TYPE = f(idVal, parameterName)
+                }
+            }
+        return this
+    }
+
+    inline infix fun <reified OUT_TYPE> ListBuilder<OUT_TYPE>.genList(
         crossinline f: GenerateValueFunction<ID_TYPE, OUT_TYPE>
     ): PropBuilder<OUT_TYPE> {
         this.function =

@@ -26,7 +26,19 @@ fun <ID_TYPE> EntityTemplate<ID_TYPE>.jsonString(/*id: ID_TYPE*/): String {
                      "\"${it.key}\":$jsonString"
                 }
 
-                (true to true) -> error("пока массив простых типов не описан")
+                (true to true) -> {
+                    val value = it.value
+                    val function1 = it.value.function(idVal, it.key)() as List<Any>
+
+                    val joinToString = function1
+                        .map { "\"${it.toString()}\"" }
+                        .joinToString(",\n")
+
+                    "\"${it.key}\":[$joinToString]"
+
+
+
+                }
                 (false to true) -> error("пока массив ссылок не описан")
                 else -> error("невозможный кез")
             }

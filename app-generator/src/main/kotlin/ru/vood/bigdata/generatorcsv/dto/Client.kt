@@ -15,6 +15,17 @@ class Client(id: String) : EntityTemplate<String>(id) {
         )
     } //getFun()// stdStr()
 
+    private val childrenNames by list<String>() genVal { id, paramName ->
+        (1.. abs(id.hashCode() %20))
+            .map {
+
+        "name" + pseudoRandom(
+            id.hashCode() + it.hashCode(),
+            20
+        )
+            }
+    }
+
     private val salary by number() genVal { id, paramName -> abs(identity(id).hashCode() % 1000000).toBigDecimal() } //getFun()// stdStr()
 
     private val isWorker by bool() genVal { id, paramName -> salary(id).hashCode() % 2 == 1 } //getFun()// stdStr()
