@@ -39,7 +39,7 @@ abstract class EntityTemplate<ID_TYPE>(
     fun number() = PropBuilder<BigDecimal>(isSimpleType = true, isList = false)
     fun date() = PropBuilder<LocalDateTime>(isSimpleType = true, isList = false)
     fun bool() = PropBuilder<Boolean>(isSimpleType = true, isList = false)
-    inline fun <reified Z> ref() = RefBuilder<Z>(isSimpleType = false, isList = false)
+    inline fun <reified Z, E: EntityTemplate<Z>> ref() = RefBuilder<E>(isSimpleType = false, isList = false)
     inline fun <reified Z> set() = PropBuilder<Set<Z>>(isSimpleType = false, isList = false)
 
     inline infix fun <reified OUT_TYPE> PropBuilder<OUT_TYPE>.genVal(
@@ -56,7 +56,7 @@ abstract class EntityTemplate<ID_TYPE>(
 
     fun stringRef() = PropBuilder<String>(isSimpleType = false, isList = false)
 
-    inline infix fun <  reified OUT_TYPE,> RefBuilder<OUT_TYPE>.genRef(
+    inline infix fun <  reified OUT_TYPE> RefBuilder<OUT_TYPE>.genRef(
         crossinline f: GenerateValueFunction<EntityTemplate<ID_TYPE>, OUT_TYPE>
     ): PropBuilder<OUT_TYPE> {
         this.function =
