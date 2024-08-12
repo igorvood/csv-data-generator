@@ -1,6 +1,5 @@
 package ru.vood.bigdata.generatorcsv.gen.ext
 
-import kotlinx.coroutines.runBlocking
 import ru.vood.bigdata.generatorcsv.gen.DataType
 import ru.vood.bigdata.generatorcsv.gen.EntityTemplate
 import ru.vood.bigdata.generatorcsv.gen.dsl.GenerateValueFunction
@@ -23,7 +22,7 @@ fun <ID_TYPE> EntityTemplate<ID_TYPE>.jsonString(/*id: ID_TYPE*/): String {
                         it.key
                     )
                     val jsonString = function1.invoke().jsonString()
-                     "\"${it.key}\":$jsonString"
+                    "\"${it.key}\":$jsonString"
                 }
 
                 (true to true) -> {
@@ -34,6 +33,7 @@ fun <ID_TYPE> EntityTemplate<ID_TYPE>.jsonString(/*id: ID_TYPE*/): String {
 
                     "\"${it.key}\":[$joinToString]"
                 }
+
                 (false to true) -> {
                     val value = it.value
 
@@ -50,6 +50,7 @@ fun <ID_TYPE> EntityTemplate<ID_TYPE>.jsonString(/*id: ID_TYPE*/): String {
 //                    println(value.isList)
 //                    error("пока массив ссылок не описан")
                 }
+
                 else -> error("невозможный кез")
             }
         }

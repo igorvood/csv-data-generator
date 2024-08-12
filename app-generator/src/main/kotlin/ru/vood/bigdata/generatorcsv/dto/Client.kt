@@ -16,13 +16,13 @@ class Client(id: String) : EntityTemplate<String>(id) {
     } //getFun()// stdStr()
 
     private val childrenNames by list<String>() genList { id, paramName ->
-        (1.. abs(id.hashCode() %20))
+        (1..abs(id.hashCode() % 20))
             .map {
 
-        "name" + pseudoRandom(
-            id.hashCode() + it.hashCode(),
-            20
-        )
+                "name" + pseudoRandom(
+                    id.hashCode() + it.hashCode(),
+                    20
+                )
             }
     }
 
@@ -44,7 +44,7 @@ class Client(id: String) : EntityTemplate<String>(id) {
     val acconts by refList genListRef { id, paramName ->
         val map = (1..abs(id.hashCode() % 20))
             .map {
-                ClientAccont(this.id.invoke()+"_"+it.toString())
+                ClientAccont(this.id.invoke() + "_" + it.toString())
             }
         map
     }
