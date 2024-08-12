@@ -23,11 +23,7 @@ fun <ID_TYPE> EntityTemplate<ID_TYPE>.jsonString(/*id: ID_TYPE*/): String {
                         it.key
                     )
                     val jsonString = function1.invoke().jsonString()
-                    val any = function1()
-                    val string = runBlocking { any.myToString() }
-                    val s = """"${it.key}"""" +":" + jsonString
-                    s
-//                    ""
+                     "\"${it.key}\":$jsonString"
                 }
 
                 (true to true) -> error("пока массив простых типов не описан")
@@ -37,7 +33,7 @@ fun <ID_TYPE> EntityTemplate<ID_TYPE>.jsonString(/*id: ID_TYPE*/): String {
         }
             .filter { it.isNotBlank() }
             .joinToString(",\n")
-        "{"+joinToString+"}"
+        "{$joinToString}"
 
     }
     return generate
