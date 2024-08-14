@@ -16,6 +16,10 @@ abstract class EntityTemplate<ID_TYPE>(
 
     val meta: TreeMap<String, MetaProperty<ID_TYPE, *>> = TreeMap()
 
+    protected open fun customSerializableLambda(): TreeMap<String, () -> String> = TreeMap()
+
+    val customSerializable by lazy { customSerializableLambda() }
+
     val id: DataType<ID_TYPE> = object : DataType<ID_TYPE> {
         override fun invoke(): ID_TYPE = id
     }

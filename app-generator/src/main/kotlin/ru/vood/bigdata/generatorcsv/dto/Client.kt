@@ -2,6 +2,8 @@ package ru.vood.bigdata.generatorcsv.dto
 
 import ru.vood.bigdata.generatorcsv.gen.EntityTemplate
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 import kotlin.math.abs
 
 class Client(id: String) : EntityTemplate<String>(id) {
@@ -48,4 +50,13 @@ class Client(id: String) : EntityTemplate<String>(id) {
         map
     }
 
+    override fun customSerializableLambda(): TreeMap<String, () -> String> {
+        val treeMap = TreeMap<String, () -> String>()
+        val name1 = this::birthDate.name
+        treeMap.putIfAbsent(name1, {
+            val format = this.birthDate(id()).format(DateTimeFormatter.ISO_TIME)
+            format
+        })
+        return treeMap
+    }
 }

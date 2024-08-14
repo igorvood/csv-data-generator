@@ -15,7 +15,12 @@ fun <ID_TYPE> EntityTemplate<ID_TYPE>.jsonString(): String {
                     } else if(dataType.isNumber()){
                         "\"${it.key}\" : ${dataType()}"
                     }  else {
-                        "\"${it.key}\" : \"${dataType()}\""
+                        val dataValue = this.customSerializable[it.key]?.let {serialiser->
+
+                            val it1 = serialiser()
+                            it1
+                        }?:dataType().toString()
+                        "\"${it.key}\" : \"${dataValue}\""
                     }
                 }
 
