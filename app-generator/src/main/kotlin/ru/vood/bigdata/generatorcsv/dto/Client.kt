@@ -1,6 +1,8 @@
 package ru.vood.bigdata.generatorcsv.dto
 
 import ru.vood.bigdata.generatorcsv.gen.EntityTemplate
+import ru.vood.bigdata.generatorcsv.gen.SerialData
+import java.io.Serializable
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -50,13 +52,14 @@ class Client(id: String) : EntityTemplate<String>(id) {
         map
     }
 
-    override fun customSerializableLambda(): TreeMap<String, () -> String> {
-        val treeMap = TreeMap<String, () -> String>()
-        val name1 = this::birthDate.name
-        treeMap.putIfAbsent(name1, {
-            val format = this.birthDate(id()).format(DateTimeFormatter.ISO_TIME)
-            format
-        })
-        return treeMap
+    override fun customSerializers(): Set<SerialData<String, Any>> {
+        val of: Set<SerialData<String, out Any>> = setOf(
+            SerialData(this::birthDate, { it.format(DateTimeFormatter.ISO_DATE) }),
+            SerialData(this::name, { "а это добавлено на сериализаторе ->"+it }),
+        )
+        return of as Set<SerialData<String, Any>>
+
     }
+
+
 }
