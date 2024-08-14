@@ -52,12 +52,12 @@ class Client(id: String) : EntityTemplate<String>(id) {
         map
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun customSerializers(): Set<SerialData<String, Any>> {
-        val of: Set<SerialData<String, out Any>> = setOf(
+        return setOf(
             SerialData(this::birthDate, { it.format(DateTimeFormatter.ISO_DATE) }),
-            SerialData(this::name, { "а это добавлено на сериализаторе ->"+it }),
-        )
-        return of as Set<SerialData<String, Any>>
+            SerialData(this::name, { it+" -> а это добавлено на сериализаторе" }),
+        ) as Set<SerialData<String, Any>>
 
     }
 
