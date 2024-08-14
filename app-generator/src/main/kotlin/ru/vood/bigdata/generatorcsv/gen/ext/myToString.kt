@@ -11,7 +11,8 @@ fun <ID_TYPE> EntityTemplate<ID_TYPE>.myToString(): String {
             when (it.value.isSimpleType to it.value.isList) {
                 (true to false) -> {
                     val f = it.value.function
-                    it.key + "=" + it.value.function(idVal, it.key)()
+                    val dataType = it.value.function(idVal, it.key)
+                    it.key + "=" + dataType()
                 }
 
                 (false to false) -> {
