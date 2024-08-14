@@ -13,6 +13,7 @@ data class MetaEntity<ID_TYPE>
 )
 
 data class MetaProperty<ID_TYPE, OUT_TYPE>(
+    val entityName: EntityName,
     val paramName: FieldName,
     val function: GenerateValueFunction<ID_TYPE, DataType<OUT_TYPE>>,
     val isSimpleType: Boolean,

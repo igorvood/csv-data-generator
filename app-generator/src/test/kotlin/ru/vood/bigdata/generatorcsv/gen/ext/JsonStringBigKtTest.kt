@@ -13,7 +13,8 @@ class JsonStringBigKtTest : FunSpec({
     test("jsonStringBig") {
 
 
-        println(Client("asdfgdfsgsdfgdfg").jsonString())
+        val client = Client("asdfgdfsgsdfgdfg")
+        println(client.jsonString())
 
 
     }

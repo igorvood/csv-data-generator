@@ -1,9 +1,6 @@
 package ru.vood.bigdata.generatorcsv.gen
 
-import ru.vood.bigdata.generatorcsv.gen.dsl.Builder
-import ru.vood.bigdata.generatorcsv.gen.dsl.FieldName
-import ru.vood.bigdata.generatorcsv.gen.dsl.GenerateValueFunction
-import ru.vood.bigdata.generatorcsv.gen.dsl.MetaProperty
+import ru.vood.bigdata.generatorcsv.gen.dsl.*
 import ru.vood.bigdata.generatorcsv.gen.ext.myToString
 import java.math.BigDecimal
 import java.time.LocalDateTime
@@ -37,14 +34,14 @@ abstract class EntityTemplate<ID_TYPE>(
         meta[metaProperty.paramName] = metaProperty
     }
 
-    fun string() = PropBuilder<String>(isSimpleType = true, isList = false)
-    fun number() = PropBuilder<BigDecimal>(isSimpleType = true, isList = false)
-    fun date() = PropBuilder<LocalDateTime>(isSimpleType = true, isList = false)
-    fun bool() = PropBuilder<Boolean>(isSimpleType = true, isList = false)
-    inline fun <reified Z, E : EntityTemplate<Z>> ref() = RefBuilder<E>(isSimpleType = false, isList = false)
+    fun string() = PropBuilder<String>(isSimpleType = true, isList = false, entityName = this::class.java.canonicalName)
+    fun number() = PropBuilder<BigDecimal>(isSimpleType = true, isList = false, entityName = this::class.java.canonicalName)
+    fun date() = PropBuilder<LocalDateTime>(isSimpleType = true, isList = false, entityName = this::class.java.canonicalName)
+    fun bool() = PropBuilder<Boolean>(isSimpleType = true, isList = false, entityName = this::class.java.canonicalName)
+    inline fun <reified Z, E : EntityTemplate<Z>> ref() = RefBuilder<E>(isSimpleType = false, isList = false, entityName = this::class.java.canonicalName)
 
-    inline fun <reified Z, E : EntityTemplate<Z>> refList() = RefBuilder<List<E>>(isSimpleType = false, isList = true)
-    inline fun <reified Z> list() = ListBuilder<List<Z>>(isSimpleType = true, isList = true)
+    inline fun <reified Z, E : EntityTemplate<Z>> refList() = RefBuilder<List<E>>(isSimpleType = false, isList = true, entityName = this::class.java.canonicalName)
+    inline fun <reified Z> list() = ListBuilder<List<Z>>(isSimpleType = true, isList = true, entityName = this::class.java.canonicalName)
 
     inline infix fun <reified OUT_TYPE> PropBuilder<OUT_TYPE>.genVal(
         crossinline f: GenerateValueFunction<ID_TYPE, OUT_TYPE>
@@ -110,21 +107,21 @@ abstract class EntityTemplate<ID_TYPE>(
     }
 
     open inner class PropBuilder<R>(
-        var name: FieldName = "",
+        var fieldName: FieldName = "",
         var function: GenerateValueFunction<ID_TYPE, DataType<R>> = { _, _ ->
-            error("Необходимо определить ф-цию в мете для поля $name ")
+            error("Необходимо определить ф-цию в мете для поля $fieldName ")
         },
         val isSimpleType: Boolean,
-        val isList: Boolean
-    ) : Builder<MetaProperty<ID_TYPE, R>>
-//where ET: EntityTemplate<Any>
+        val isList: Boolean,
+        var entityName: EntityName,
+        ) : Builder<MetaProperty<ID_TYPE, R>>
     {
 
         operator fun provideDelegate(
             thisRef: EntityTemplate<ID_TYPE>,
             property: KProperty<*>
         ): ReadOnlyProperty<EntityTemplate<ID_TYPE>, MetaProperty<ID_TYPE, R>> {
-            name = property.name
+            fieldName = property.name
             val build: MetaProperty<ID_TYPE, R> = this@PropBuilder.build()
             thisRef.addProp(build)
             return ReadOnlyProperty { thisRef, property ->
@@ -133,17 +130,18 @@ abstract class EntityTemplate<ID_TYPE>(
 
         }
 
-        override fun build(): MetaProperty<ID_TYPE, R> = MetaProperty(name, function, isSimpleType, isList)
+        override fun build(): MetaProperty<ID_TYPE, R> = MetaProperty(entityName, fieldName, function, isSimpleType, isList)
     }
 
     inner class RefBuilder<R>(
-        name: FieldName = "",
+        fieldName: FieldName = "",
         function: GenerateValueFunction<ID_TYPE, DataType<R>> = { _, _ ->
-            error("Необходимо определить ф-цию в мете для поля $name ")
+            error("Необходимо определить ф-цию в мете для поля $fieldName ")
         },
         isSimpleType: Boolean,
-        isList: Boolean
-    ) : PropBuilder<R>(name, function, isSimpleType, isList)
+        isList: Boolean,
+        entityName: EntityName,
+    ) : PropBuilder<R>(fieldName, function, isSimpleType, isList, entityName)
 
     open inner class ListBuilder<R>(
         name: FieldName = "",
@@ -151,8 +149,9 @@ abstract class EntityTemplate<ID_TYPE>(
             error("Необходимо определить ф-цию в мете для поля $name ")
         },
         isSimpleType: Boolean,
-        isList: Boolean
-    ) : PropBuilder<R>(name, function, isSimpleType, isList)
+        isList: Boolean,
+        entityName: EntityName,
+    ) : PropBuilder<R>(name, function, isSimpleType, isList, entityName)
 
 }
 
