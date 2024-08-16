@@ -42,16 +42,6 @@ class CsvStringBigKtTest : FunSpec({
                 }
             )
 
-//            val map = (1..50)
-//                .map {
-//                    async {
-//                        extracted(
-//                            clientFlow,
-//                            File("${foldCl}${it}_paralel"), { it.csvStringBig() },
-//                        )
-//                    }
-//                }
-//            map.awaitAll()
             asyncs.awaitAll()
         }
 
