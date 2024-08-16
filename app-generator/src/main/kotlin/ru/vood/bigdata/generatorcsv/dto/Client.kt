@@ -1,5 +1,6 @@
 package ru.vood.bigdata.generatorcsv.dto
 
+import ru.vood.bigdata.generatorcsv.dto.id.ClientAccountId
 import ru.vood.bigdata.generatorcsv.gen.EntityTemplate
 import ru.vood.bigdata.generatorcsv.gen.SerialData
 import java.io.Serializable
@@ -39,15 +40,15 @@ class Client(id: String) : EntityTemplate<String>(id) {
         LocalDateTime.of(1980, 1, 1, 1, 1).plusDays(abs(id.hashCode() % 10000).toLong())
     }
 
-    val accont by ref<String, ClientAccont>() genRef { id, paramName ->
-        val clientAccont: ClientAccont = ClientAccont(this.invoke().id.invoke())
-        clientAccont
+    val accont by ref<ClientAccountId, ClientAccont>() genRef { id, paramName ->
+        val id1 = this.invoke().id.invoke()
+         ClientAccont(ClientAccountId(id1, id1))
     }
 
-    val acconts by refList<String, ClientAccont>() genListRef { id, paramName ->
+    val acconts by refList<ClientAccountId, ClientAccont>() genListRef { id, paramName ->
         val map = (1..abs(id.hashCode() % 20))
             .map {
-                ClientAccont(this.id.invoke() + "_" + it.toString())
+                ClientAccont(ClientAccountId(this.id.invoke(), it.toString()))
             }
         map
     }

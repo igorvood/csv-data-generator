@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import org.junit.jupiter.api.Assertions
+import ru.vood.bigdata.generatorcsv.dto.id.ClientAccountId
 import ru.vood.bigdata.generatorcsv.flow.util.chunked
 import ru.vood.bigdata.generatorcsv.gen.EntityTemplate
 import ru.vood.bigdata.generatorcsv.gen.ext.extracted
@@ -87,7 +88,7 @@ class ClientTest : FunSpec({
 //            .map { it.map { it.accont(it.id()) } }
 
         val launch = async { extracted(clientFlow, File("${foldCl}_paralel"), EntityTemplate<String>::myToString) }
-        val launch1 = async { extracted(accontFlow, File("${foldAcc}_paralel"), EntityTemplate<String>::myToString) }
+        val launch1 = async { extracted(accontFlow, File("${foldAcc}_paralel"), EntityTemplate<ClientAccountId>::myToString) }
         launch.await()
         launch1.await()
 

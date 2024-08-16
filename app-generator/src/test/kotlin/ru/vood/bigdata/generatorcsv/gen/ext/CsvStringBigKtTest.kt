@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import ru.vood.bigdata.generatorcsv.dto.Client
+import ru.vood.bigdata.generatorcsv.dto.id.ClientAccountId
 import ru.vood.bigdata.generatorcsv.gen.EntityTemplate
 import java.io.File
 
@@ -36,7 +37,7 @@ class CsvStringBigKtTest : FunSpec({
                 async {
                     extracted(
                         accontFlow,
-                        File("${foldAcc}_paralel"), EntityTemplate<String>::csvStringBig
+                        File("${foldAcc}_paralel"), EntityTemplate<ClientAccountId>::csvStringBig
                     )
                 }
             )
