@@ -40,16 +40,42 @@ abstract class EntityTemplate<ID_TYPE>(
         meta[metaProperty.paramName] = metaProperty
     }
 
-    fun string(f: GenerateValueFunction<ID_TYPE, String>) = PropBuilder<String>(isSimpleType = true, isList = false, entityName = this::class.java.canonicalName, function = { idVal, parameterName ->
-        object : DataType<String> {
-            override fun invoke(): String = f(idVal, parameterName)
-        }
-    })
-    fun number() =
-        PropBuilder<BigDecimal>(isSimpleType = true, isList = false, entityName = this::class.java.canonicalName)
+    fun string(f: GenerateValueFunction<ID_TYPE, String>) =
+        PropBuilder(
+            isSimpleType = true,
+            isList = false,
+            entityName = this::class.java.canonicalName,
+            function = { idVal, parameterName ->
+                object : DataType<String> {
+                    override fun invoke(): String = f(idVal, parameterName)
+                }
+            })
+
+    fun number(f: GenerateValueFunction<ID_TYPE, BigDecimal>) =
+        PropBuilder(
+            isSimpleType = true,
+            isList = false,
+            entityName = this::class.java.canonicalName,
+            function = { idVal, parameterName ->
+                object : DataType<BigDecimal> {
+                    override fun invoke(): BigDecimal = f(idVal, parameterName)
+                }
+            })
 
     fun date() =
         PropBuilder<LocalDateTime>(isSimpleType = true, isList = false, entityName = this::class.java.canonicalName)
+
+    fun date(f: GenerateValueFunction<ID_TYPE, LocalDateTime>) =
+        PropBuilder<LocalDateTime>(
+            isSimpleType = true,
+            isList = false,
+            entityName = this::class.java.canonicalName,
+            function = { idVal, parameterName ->
+                object : DataType<LocalDateTime> {
+                    override fun invoke(): LocalDateTime = f(idVal, parameterName)
+                }
+            }
+            )
 
     fun bool() = PropBuilder<Boolean>(isSimpleType = true, isList = false, entityName = this::class.java.canonicalName)
     inline fun <reified Z, E : EntityTemplate<Z>> ref() =
@@ -61,6 +87,7 @@ abstract class EntityTemplate<ID_TYPE>(
     inline fun <reified Z> list() =
         ListBuilder<List<Z>>(isSimpleType = true, isList = true, entityName = this::class.java.canonicalName)
 
+    @Deprecated("asd")
     inline infix fun <reified OUT_TYPE> PropBuilder<OUT_TYPE>.genVal(
         crossinline f: GenerateValueFunction<ID_TYPE, OUT_TYPE>
     ): PropBuilder<OUT_TYPE> {

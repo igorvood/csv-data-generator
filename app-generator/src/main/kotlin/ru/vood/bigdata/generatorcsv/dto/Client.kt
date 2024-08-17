@@ -29,12 +29,12 @@ class Client(id: String) : EntityTemplate<String>(id) {
             }
     }
 
-    private val salary by number() genVal { id, paramName -> abs(identity(id).hashCode() % 1000000).toBigDecimal() } //getFun()// stdStr()
+    private val salary by number { id, paramName -> abs(identity(id).hashCode() % 1000000).toBigDecimal() }
 
     private val isWorker by bool() genVal { id, paramName -> salary(id).hashCode() % 2 == 1 } //getFun()// stdStr()
     private val isMarried by bool().genBool()
 
-    private val birthDate by date() genVal { id, paramName ->
+    private val birthDate by date { id, paramName ->
         LocalDateTime.of(1980, 1, 1, 1, 1).plusDays(abs(id.hashCode() % 10000).toLong())
     }
 

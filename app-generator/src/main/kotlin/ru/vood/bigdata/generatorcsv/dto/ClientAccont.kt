@@ -14,5 +14,5 @@ class ClientAccont(id: ClientAccountId) : EntityTemplate<ClientAccountId>(id) {
         )
     }
 
-    val balance by number() genVal { id, paramName -> id.absHashCode().toBigDecimal() }
+    val balance by number { id, paramName -> id.absHashCode().toBigDecimal() }
 }
