@@ -88,7 +88,8 @@ class ClientTest : FunSpec({
 //            .map { it.map { it.accont(it.id()) } }
 
         val launch = async { extracted(clientFlow, File("${foldCl}_paralel"), EntityTemplate<String>::myToString) }
-        val launch1 = async { extracted(accontFlow, File("${foldAcc}_paralel"), EntityTemplate<ClientAccountId>::myToString) }
+        val launch1 =
+            async { extracted(accontFlow, File("${foldAcc}_paralel"), EntityTemplate<ClientAccountId>::myToString) }
         launch.await()
         launch1.await()
 
