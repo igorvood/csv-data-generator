@@ -32,13 +32,13 @@ class Client(id: String) : EntityTemplate<String>(id) {
     private val salary by number { id, paramName -> abs(identity(id).hashCode() % 1000000).toBigDecimal() }
 
     private val isWorker by bool { id, paramName -> salary(id).hashCode() % 2 == 1 } //getFun()// stdStr()
-    private val isMarried by bool (genBoolDefaultF)
+    private val isMarried by bool(genBoolDefaultF)
 
     private val birthDate by date { id, paramName ->
         LocalDateTime.of(1980, 1, 1, 1, 1).plusDays(abs(id.hashCode() % 10000).toLong())
     }
 
-    val accont by ref<ClientAccountId, ClientAccont>() genRef  { id, paramName ->
+    val accont by ref<ClientAccountId, ClientAccont>() genRef { id, paramName ->
         val id1 = this.invoke().id.invoke()
         ClientAccont(ClientAccountId(id1, id1))
     }
