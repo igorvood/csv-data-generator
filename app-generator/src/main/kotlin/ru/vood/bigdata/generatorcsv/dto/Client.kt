@@ -38,7 +38,7 @@ class Client(id: String) : EntityTemplate<String>(id) {
         LocalDateTime.of(1980, 1, 1, 1, 1).plusDays(abs(id.hashCode() % 10000).toLong())
     }
 
-    val accont by ref<ClientAccountId, ClientAccont>() genRef { id, paramName ->
+    val accont by ref<ClientAccountId, ClientAccont>() genRef  { id, paramName ->
         val id1 = this.invoke().id.invoke()
         ClientAccont(ClientAccountId(id1, id1))
     }

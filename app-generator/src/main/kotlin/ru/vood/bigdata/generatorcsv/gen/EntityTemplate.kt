@@ -84,28 +84,9 @@ abstract class EntityTemplate<ID_TYPE>(
                 }
             }
         )
+
     inline fun <reified Z, E : EntityTemplate<Z>> ref() =
         RefBuilder<E>(isSimpleType = false, isList = false, entityName = this::class.java.canonicalName)
-
-    inline fun <reified Z, E : EntityTemplate<Z>> refList() =
-        RefBuilder<List<E>>(isSimpleType = false, isList = true, entityName = this::class.java.canonicalName)
-
-    inline fun <reified Z> list() =
-        ListBuilder<List<Z>>(isSimpleType = true, isList = true, entityName = this::class.java.canonicalName)
-
-    @Deprecated("asd")
-    inline infix fun <reified OUT_TYPE> PropBuilder<OUT_TYPE>.genVal(
-        crossinline f: GenerateValueFunction<ID_TYPE, OUT_TYPE>
-    ): PropBuilder<OUT_TYPE> {
-        this.function =
-            { idVal, parameterName ->
-                object : DataType<OUT_TYPE> {
-                    override fun invoke(): OUT_TYPE = f(idVal, parameterName)
-                }
-            }
-        return this
-    }
-
     inline infix fun <reified OUT_TYPE> RefBuilder<OUT_TYPE>.genRef(
         crossinline f: GenerateValueFunction<EntityTemplate<ID_TYPE>, OUT_TYPE>
     ): PropBuilder<OUT_TYPE> {
@@ -116,6 +97,14 @@ abstract class EntityTemplate<ID_TYPE>(
             }
         return this
     }
+
+    inline fun <reified Z, E : EntityTemplate<Z>> refList() =
+        RefBuilder<List<E>>(isSimpleType = false, isList = true, entityName = this::class.java.canonicalName)
+
+    inline fun <reified Z> list() =
+        ListBuilder<List<Z>>(isSimpleType = true, isList = true, entityName = this::class.java.canonicalName)
+
+
 
     inline infix fun <reified OUT_TYPE> RefBuilder<List<OUT_TYPE>>.genListRef(
         crossinline f: GenerateValueFunction<EntityTemplate<ID_TYPE>, List<OUT_TYPE>>
