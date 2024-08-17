@@ -62,11 +62,8 @@ abstract class EntityTemplate<ID_TYPE>(
                 }
             })
 
-    fun date() =
-        PropBuilder<LocalDateTime>(isSimpleType = true, isList = false, entityName = this::class.java.canonicalName)
-
     fun date(f: GenerateValueFunction<ID_TYPE, LocalDateTime>) =
-        PropBuilder<LocalDateTime>(
+        PropBuilder(
             isSimpleType = true,
             isList = false,
             entityName = this::class.java.canonicalName,
@@ -76,8 +73,17 @@ abstract class EntityTemplate<ID_TYPE>(
                 }
             }
             )
-
-    fun bool() = PropBuilder<Boolean>(isSimpleType = true, isList = false, entityName = this::class.java.canonicalName)
+    fun bool(f: GenerateValueFunction<ID_TYPE, Boolean>) =
+        PropBuilder(
+            isSimpleType = true,
+            isList = false,
+            entityName = this::class.java.canonicalName,
+            function = { idVal, parameterName ->
+                object : DataType<Boolean> {
+                    override fun invoke(): Boolean = f(idVal, parameterName)
+                }
+            }
+        )
     inline fun <reified Z, E : EntityTemplate<Z>> ref() =
         RefBuilder<E>(isSimpleType = false, isList = false, entityName = this::class.java.canonicalName)
 
@@ -137,7 +143,13 @@ abstract class EntityTemplate<ID_TYPE>(
         return this
     }
 
-    fun PropBuilder<Boolean>.genBool(
+
+    val genBoolDefaultF: GenerateValueFunction<ID_TYPE, Boolean> =  { id, parameterName ->
+                val hc = abs(id.hashCode())
+                 hc % 2 == 1
+    }
+
+    fun PropBuilder<Boolean>.genBoolDefault(
     ): PropBuilder<Boolean> {
         this.function =
             { id, parameterName ->
