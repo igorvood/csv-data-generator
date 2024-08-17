@@ -8,10 +8,10 @@ import java.time.format.DateTimeFormatter
 import kotlin.math.abs
 
 class Client(id: String) : EntityTemplate<String>(id) {
-    private val identity by string() genVal { id, paramName ->
+    private val identity by string { id, paramName ->
         paramName + "_" + id
     }
-    private val name by string() genVal { id, paramName ->
+    private val name by string { id, paramName ->
         "name" + pseudoRandom(
             id.hashCode(),
             20

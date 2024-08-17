@@ -40,7 +40,11 @@ abstract class EntityTemplate<ID_TYPE>(
         meta[metaProperty.paramName] = metaProperty
     }
 
-    fun string() = PropBuilder<String>(isSimpleType = true, isList = false, entityName = this::class.java.canonicalName)
+    fun string(f: GenerateValueFunction<ID_TYPE, String>) = PropBuilder<String>(isSimpleType = true, isList = false, entityName = this::class.java.canonicalName, function = { idVal, parameterName ->
+        object : DataType<String> {
+            override fun invoke(): String = f(idVal, parameterName)
+        }
+    })
     fun number() =
         PropBuilder<BigDecimal>(isSimpleType = true, isList = false, entityName = this::class.java.canonicalName)
 

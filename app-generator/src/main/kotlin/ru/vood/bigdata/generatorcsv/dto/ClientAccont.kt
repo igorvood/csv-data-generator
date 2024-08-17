@@ -5,8 +5,8 @@ import ru.vood.bigdata.generatorcsv.gen.EntityTemplate
 import ru.vood.bigdata.generatorcsv.util.absHashCode
 
 class ClientAccont(id: ClientAccountId) : EntityTemplate<ClientAccountId>(id) {
-    val identity by string() genVal { id, paramName -> id.clientId + "_" + id.accountId }
-    val acc by string() genVal { id, paramName ->
+    val identity by string { id, paramName -> id.clientId + "_" + id.accountId }
+    val acc by string { id, paramName ->
         pseudoRandom(
             id.hashCode(),
             20,
