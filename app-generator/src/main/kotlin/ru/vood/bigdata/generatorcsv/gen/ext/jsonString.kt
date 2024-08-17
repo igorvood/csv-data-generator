@@ -10,16 +10,16 @@ fun <ID_TYPE> EntityTemplate<ID_TYPE>.jsonString(): String {
             when (it.value.isSimpleType to it.value.isList) {
                 (true to false) -> {
                     val dataType = it.value.function(idVal, it.key)
-                    if (dataType.isBoolean()){
+                    if (dataType.isBoolean()) {
                         "\"${it.key}\" : ${dataType()}"
-                    } else if(dataType.isNumber()){
+                    } else if (dataType.isNumber()) {
                         "\"${it.key}\" : ${dataType()}"
-                    }  else {
-                        val dataValue = this.customSerializable[it.key]?.let {serialiser->
+                    } else {
+                        val dataValue = this.customSerializable[it.key]?.let { serialiser ->
 
                             val it1 = serialiser()
                             it1
-                        }?:dataType().toString()
+                        } ?: dataType().toString()
                         "\"${it.key}\" : \"${dataValue}\""
                     }
                 }

@@ -9,7 +9,8 @@ fun <ID_TYPE> EntityTemplate<ID_TYPE>.csvStringBig(): String {
                 true -> {
                     it.value.function(idVal, it.key)().toString()
                 }
-                false ->""
+
+                false -> ""
             }
         }
             .filter { it.isNotBlank() }

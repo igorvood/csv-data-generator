@@ -3,10 +3,8 @@ package ru.vood.bigdata.generatorcsv.dto
 import ru.vood.bigdata.generatorcsv.dto.id.ClientAccountId
 import ru.vood.bigdata.generatorcsv.gen.EntityTemplate
 import ru.vood.bigdata.generatorcsv.gen.SerialData
-import java.io.Serializable
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 import kotlin.math.abs
 
 class Client(id: String) : EntityTemplate<String>(id) {
@@ -42,7 +40,7 @@ class Client(id: String) : EntityTemplate<String>(id) {
 
     val accont by ref<ClientAccountId, ClientAccont>() genRef { id, paramName ->
         val id1 = this.invoke().id.invoke()
-         ClientAccont(ClientAccountId(id1, id1))
+        ClientAccont(ClientAccountId(id1, id1))
     }
 
     val acconts by refList<ClientAccountId, ClientAccont>() genListRef { id, paramName ->
@@ -57,7 +55,7 @@ class Client(id: String) : EntityTemplate<String>(id) {
     override fun customSerializers(): Set<SerialData<String, Any>> {
         return setOf(
             SerialData(this::birthDate, { it.format(DateTimeFormatter.ISO_DATE) }),
-            SerialData(this::name, { it+" -> а это добавлено на сериализаторе" }),
+            SerialData(this::name, { it + " -> а это добавлено на сериализаторе" }),
         ) as Set<SerialData<String, Any>>
 
     }

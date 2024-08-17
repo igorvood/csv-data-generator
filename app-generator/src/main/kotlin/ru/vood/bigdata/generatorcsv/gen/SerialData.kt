@@ -5,5 +5,5 @@ import kotlin.reflect.KProperty0
 
 data class SerialData<ID, RES>(
     val prop: KProperty0<MetaProperty<in ID, in RES>>,
-    val f: (RES)->String
+    val f: (RES) -> String
 )
